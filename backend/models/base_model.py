@@ -25,8 +25,18 @@ class BaseModel:
         dir = {}
 
         for key, value in self.__dict__.items():
-            if key == "_sa_instance_state":
+            if key == "_sa_instance_state" or key == "password":
                 continue
             dir[key] = value
 
         return dir
+    
+    def save_db(self):
+        from models import storage
+        storage.new(self)
+        storage.save()
+    
+    def delete(self):
+        from models import storage
+        storage.delete(self)
+        storage.save()

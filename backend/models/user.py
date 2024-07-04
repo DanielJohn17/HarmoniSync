@@ -1,6 +1,6 @@
 #!/usr/bin/python3
+import bcrypt
 from models.base_model import BaseModel
-from models import storage
 from config import db
 
 
@@ -8,16 +8,24 @@ class User(BaseModel, db.Model):
     __tablename__ = "User"
 
     id = db.Column(db.String(60), primary_key=True)
-    user_name = db.Column(db.String(60), unique=True, nullable=False)
+    email = db.Column(db.String(60), unique=True, nullable=False)
     DOB = db.Column(db.String(60), nullable=False)
-    
+    full_name = db.Column(db.String(60), nullable=False)
+    password = db.Column(db.LargeBinary(128), nullable=False)
+
+    playlists = db.relationship("Playlist", backref="user", cascade="all, delete")
+
     def __init__(self, *args, **kwargs):
         super().__init__()
         for key, value in kwargs.items():
+            if key == "password":
+                value = self.hash_password(value)
             setattr(self, key, value)
-        
     
-    def save_db(self):
-        storage.new(self)
-        storage.save()
-    
+    def hash_password(self, value):
+        value = bcrypt.hashpw(value.encode(), bcrypt.gensalt())
+
+        return value
+
+    def verify_password(self, password):
+        return bcrypt.checkpw(password.encode(), self.password)
