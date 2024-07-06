@@ -115,3 +115,24 @@ def update_playlist(user_id, playlist_id):
         return jsonify({"error": "Could not update playlist"}), 400
     
     return jsonify({"message": "Playlist Updated!"}), 200
+
+
+# create liked song playlist
+@app_view.route("/users/<user_id>/playlists/create_liked_songs_playlist", methods=["POST"])
+def create_liked_songs_playlist(user_id):
+    '''Create liked songs playlist route'''
+
+    user = storage.get("User", user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    if "Liked Songs" in [playlist.name for playlist in user.playlists]:
+        return jsonify({"error": "Liked Songs Playlist already exists"}), 400
+    liked_songs_playlist = Playlist(name="Liked Songs", description="Liked songs playlist", user_id=user_id)
+
+    try:
+        liked_songs_playlist.save_db()
+    except:
+        return jsonify({"error": "Could not create liked songs playlist"}), 400
+    
+    return jsonify({"message": "Liked Songs Playlist Created!"}), 201
