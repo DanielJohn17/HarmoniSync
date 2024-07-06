@@ -30,10 +30,22 @@ class SpotifySearch:
         search_results = {}
 
         for search_type in search_types:
+            final_items = []
             items = json_result.get(search_type + 's', {}).get('items', [])
-            search_results[search_type + 's'] = items
+
+            for item in items:
+                final_items.append({
+                    "id": item.get("id"),
+                    "name": item.get("name"),
+                    "followers": item.get("followers", {}).get("total"),
+                    "genres": item.get("genres", []),
+                    "type": search_type,
+                    "images": item.get("images", [])[0].get("url") if item.get("images", []) else None,
+                    "spotify_link": item.get("external_urls", {}).get("spotify"),
+                })
+            search_results[search_type + 's'] = final_items
         
         return search_results
 
-search = SpotifySearch()
+spotify_search = SpotifySearch()
 
