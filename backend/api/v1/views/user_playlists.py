@@ -128,6 +128,7 @@ def create_liked_songs_playlist(user_id):
 
     if "Liked Songs" in [playlist.name for playlist in user.playlists]:
         return jsonify({"error": "Liked Songs Playlist already exists"}), 400
+
     liked_songs_playlist = Playlist(name="Liked Songs", description="Liked songs playlist", user_id=user_id)
 
     try:
