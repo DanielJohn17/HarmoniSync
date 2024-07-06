@@ -7,11 +7,6 @@ class Track(BaseModel, db.Model):
     __tablename__ = "Track"
 
     id = db.Column(db.String(60), primary_key=True)
-    name = db.Column(db.String(60), nullable=False)
-    artist = db.Column(db.String(60), nullable=False)
-    album = db.Column(db.String(60), nullable=False)
-    release_date = db.Column(db.String(60), nullable=False)
-    duration_ms = db.Column(db.String(60), nullable=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__()

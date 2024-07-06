@@ -15,12 +15,11 @@ def playlists(user_id):
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    all_playlists = storage.all("Playlist")
+    all_playlists = storage.get("User", user_id).playlists
     playlists_list = []
 
-    for playlist in all_playlists.values():
-        if playlist.user_id == user_id:
-            playlists_list.append(playlist.to_dict())
+    for playlist in all_playlists:
+        playlists_list.append(playlist.to_dict())
     
     return jsonify(playlists_list)
 
@@ -81,6 +80,7 @@ def delete_playlist(user_id, playlist_id):
         return jsonify({"error": "Playlist not found"}), 404
 
     try:
+        user.playlists.remove(playlist)
         playlist.delete()
     except:
         return jsonify({"error": "Could not delete playlist"}), 400
@@ -88,7 +88,7 @@ def delete_playlist(user_id, playlist_id):
     return jsonify({"message": "Playlist Deleted!"}), 200
 
 # Update playlist route
-@app_view.route("/users/<user_id>/playlists/<playlist_id>", methods=["PUT"])
+@app_view.route("/users/<user_id>/playlists/<playlist_id>", methods=["PATCH"])
 def update_playlist(user_id, playlist_id):
     '''Update playlist by id route'''
 
@@ -103,11 +103,8 @@ def update_playlist(user_id, playlist_id):
 
     data = request.get_json()
 
-    name = data.get("name")
-    description = data.get("description")
-
-    if not name or not description:
-        return jsonify({"error": "Missing data"}), 400
+    name = data.get("name", playlist.name)
+    description = data.get("description", playlist.description)
 
     playlist.name = name
     playlist.description = description
