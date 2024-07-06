@@ -10,3 +10,4 @@ from api.v1.views.albums import *
 from api.v1.views.search import *
 from api.v1.views.playlist_tracks import *
 from api.v1.views.tracks import *
+from api.v1.views.artists import *
