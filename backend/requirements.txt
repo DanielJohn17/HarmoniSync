@@ -6,3 +6,4 @@ gunicorn
 python-dotenv
 mysqlclient
 bcrypt
+lyricsgenius
