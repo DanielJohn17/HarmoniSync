@@ -1,11 +1,14 @@
+#!/usr/bin/python3
 from flask import Blueprint
 
-app_view = Blueprint("app_view", __name__)
+app_view = Blueprint("app_view", __name__, url_prefix="/api/v1")
 
-# Import Statements
-from api.v1.views.album import *
-from api.v1.views.artist import *
-from api.v1.views.liked_music import *
-from api.v1.views.music import *
-from api.v1.views.playlist import *
-from api.v1.views.user import *
+
+from api.v1.views.users import *
+from api.v1.views.user_playlists import *
+from api.v1.views.albums import *
+from api.v1.views.search import *
+from api.v1.views.playlist_tracks import *
+from api.v1.views.tracks import *
+from api.v1.views.artists import *
+from api.v1.views.lyrics import *
