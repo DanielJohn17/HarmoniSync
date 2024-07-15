@@ -11,7 +11,7 @@ class GetTrack:
         result = requests.get(url, headers=headers)
 
         if result.status_code != 200:
-            return {"error": "Faild to retrive data"}
+            return {"error": "Failed to retrive data"}
 
         json_result = json.loads(result.content)
 
@@ -48,33 +48,6 @@ class GetTrack:
         ]
 
         return track_content
-
-    # def get_track_audio_features(self, track_id):
-    #     url = "https://api.spotify.com/v1/audio-features/" + track_id
-    #     headers = spotify_auth.get_auth_header()
-
-    #     result = requests.get(url, headers=headers)
-
-    #     if result.status_code != 200:
-    #         return {"error": "Faild to retrive data"}
-
-    #     json_result = json.loads(result.content)
-
-    #     return json_result
-
-    # def get_track_audio_analysis(self, track_id):
-    #     url = "https://api.spotify.com/v1/audio-analysis/" + track_id
-    #     headers = spotify_auth.get_auth_header()
-
-    #     result = requests.get(url, headers=headers)
-
-    #     if result.status_code != 200:
-    #         return {"error": "Faild to retrive data"}
-
-    #     json_result = json.loads(result.content)
-
-    #     return json_result
-
 
 class GetRecommendation:
     def filter_recommendation(self, track):

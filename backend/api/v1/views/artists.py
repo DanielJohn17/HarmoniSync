@@ -40,7 +40,7 @@ def get_artist_top_tracks(artist_id):
 def get_related_artists(artist_id):
     '''Get related artists route'''
 
-    related_artists = artist.get_related_artists(artist_id)
+    related_artists = artist.get_artist_related_artists(artist_id)
     if "error" in related_artists:
         return jsonify({"error": "Failed to retrieve data"}), 500
 
