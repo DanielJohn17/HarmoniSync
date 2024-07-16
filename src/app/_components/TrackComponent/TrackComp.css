@@ -1,0 +1,119 @@
+.track-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border: 2px solid white;
+    border-radius: 0.5rem;
+    margin: 0.25rem;
+    width: 100%;
+    padding: 0.25rem 1rem;
+    gap: 2rem;
+    max-height: 60px;
+    max-width: 100%;
+    max-width: 800px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.track-container .track-number {
+    font-size: var(--font-size-p);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    border-radius: 500%;
+    padding: 0.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.track-container .track-image {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+}
+
+.track-container .track-title-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 45%;
+    max-width: 50%;
+    margin: 0px;
+}
+
+.track-container .track-title-container p {
+    margin: 0px;
+    font-size: var(--font-size-p);
+}
+
+.track-container .track-title-container a {
+    margin: 0px;
+    font-size: var(--font-size-small);
+    text-decoration: none;
+    color: var(--color-white);
+    color: var(--color-primary)
+}
+
+.track-container .track-title-container a:hover {
+    text-decoration: underline;
+}
+
+.track-container a {
+    text-decoration: none;
+    color: var(--color-white);
+    display: flex;
+    align-items: center;
+}
+
+.track-container a:hover {
+    color: var(--color-primary);
+}
+
+.track-container .more-options {
+    cursor: pointer;
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.options {
+    position: absolute;
+    z-index: 10;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 1rem;
+}
+
+.options .like-track {
+    display: flex;
+    align-items: center;
+}
+
+.options .like-track:hover {
+    color: red;
+}
+
+.options a {
+    display: flex;
+    align-items: center;
+}
+
+.options a:hover {
+    color: var(--color-primary);
+    background-color: #f0f0f0;
+}
+
+.options a {
+padding: 5px 10px;
+text-decoration: none;
+color: #333;
+cursor: pointer;
+}
+  
