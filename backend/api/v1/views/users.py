@@ -20,7 +20,7 @@ def users():
 # Get user by id route
 @app_view.route("/users/<user_id>", methods=["GET"])
 def get_user(user_id):
-    user = storage.get("User", user_id)
+    user = storage.get("User", user_id, None)
 
     if not user:
         return jsonify({"error": "User not found"}), 404
@@ -72,7 +72,7 @@ def delete_user(user_id):
     if not email:
         return jsonify({"error": "Missing data"}), 400
 
-    user = storage.get("User", user_id)
+    user = storage.get("User", user_id, None)
 
     try:
         user.delete()

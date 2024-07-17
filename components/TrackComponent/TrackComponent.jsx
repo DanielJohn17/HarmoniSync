@@ -4,6 +4,8 @@ import { CiCircleMore, CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
 import { MdOpenInNew } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
+import { formatText } from "@app/search/page";
+import Image from "next/image";
 
 import "./TrackComp.css";
 
@@ -48,10 +50,18 @@ const TrackComponent = ({ track, i }) => {
     <>
       <div className="track-container">
         <p className="track-number">{i}</p>
-        <img className="track-image" src={Placeholder} alt="Track Image" />
+        <img
+          className="track-image"
+          src={track.images ? track.images : Placeholder}
+          alt="Track Image"
+          width={32}
+          height={32}
+        />
         <div className="track-title-container">
-          <p>{track.name}</p>
-          <a href={track.artist_name_url[1]}>{track.artist_name_url[0]}</a>
+          <p>{formatText({ text: track.name })}</p>
+          <a href={track.artist_name_url[1]}>
+            {formatText({ text: track.artist_name_url[0] })}
+          </a>
         </div>
         <p>{calcDuration()}</p>
         <a href={track.spotify_link}>

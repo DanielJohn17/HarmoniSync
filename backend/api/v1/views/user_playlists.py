@@ -11,11 +11,11 @@ from models.playlist import Playlist
 def playlists(user_id):
     '''Get all playlists route'''
 
-    user = storage.get("User", user_id)
+    user = storage.get("User", user_id, None)
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    all_playlists = storage.get("User", user_id).playlists
+    all_playlists = storage.get("User", user_id, None).playlists
     playlists_list = []
 
     for playlist in all_playlists:
@@ -28,7 +28,7 @@ def playlists(user_id):
 def create_playlist(user_id):
     '''Create playlist route'''
 
-    user = storage.get("User", user_id)
+    user = storage.get("User", user_id, None)
     if not user:
         return jsonify({"error": "User not found"}), 404
 
@@ -54,11 +54,11 @@ def create_playlist(user_id):
 def get_playlist(user_id, playlist_id):
     '''Get playlist by id route'''
 
-    user = storage.get("User", user_id)
+    user = storage.get("User", user_id, None)
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    playlist = storage.get("Playlist", playlist_id)
+    playlist = storage.get("Playlist", playlist_id, None)
 
     if not playlist:
         return jsonify({"error": "Playlist not found"}), 404
@@ -70,11 +70,11 @@ def get_playlist(user_id, playlist_id):
 def delete_playlist(user_id, playlist_id):
     '''Delete playlist by id route'''
 
-    user = storage.get("User", user_id)
+    user = storage.get("User", user_id, None)
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    playlist = storage.get("Playlist", playlist_id)
+    playlist = storage.get("Playlist", playlist_id, None)
 
     if not playlist:
         return jsonify({"error": "Playlist not found"}), 404
@@ -92,11 +92,11 @@ def delete_playlist(user_id, playlist_id):
 def update_playlist(user_id, playlist_id):
     '''Update playlist by id route'''
 
-    user = storage.get("User", user_id)
+    user = storage.get("User", user_id, None)
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    playlist = storage.get("Playlist", playlist_id)
+    playlist = storage.get("Playlist", playlist_id, None)
 
     if not playlist:
         return jsonify({"error": "Playlist not found"}), 404

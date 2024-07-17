@@ -9,11 +9,11 @@ from models import storage
 def get_playlist_tracks(user_id, playlist_id):
     '''Get playlist tracks route'''
 
-    user = storage.get("User", user_id)
+    user = storage.get("User", user_id, None)
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    playlist = storage.get("Playlist", playlist_id)
+    playlist = storage.get("Playlist", playlist_id, None)
     if not playlist:
         return jsonify({"error": "Playlist not found"}), 404
     
@@ -30,11 +30,11 @@ def get_playlist_tracks(user_id, playlist_id):
 def add_track_to_playlist(user_id, playlist_id):
     '''Add track to playlist route'''
 
-    user = storage.get("User", user_id)
+    user = storage.get("User", user_id, None)
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    playlist = storage.get("Playlist", playlist_id)
+    playlist = storage.get("Playlist", playlist_id, None)
     if not playlist:
         return jsonify({"error": "Playlist not found"}), 404
 
@@ -61,15 +61,15 @@ def add_track_to_playlist(user_id, playlist_id):
 def delete_track_from_playlist(user_id, playlist_id, track_id):
     '''Delete track from playlist route'''
 
-    user = storage.get("User", user_id)
+    user = storage.get("User", user_id, None)
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    playlist = storage.get("Playlist", playlist_id)
+    playlist = storage.get("Playlist", playlist_id, None)
     if not playlist:
         return jsonify({"error": "Playlist not found"}), 404
 
-    track = storage.get("Track", track_id)
+    track = storage.get("Track", track_id, None)
     if not track:
         return jsonify({"error": "Track not found"}), 404
 

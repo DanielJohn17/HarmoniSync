@@ -1,43 +1,34 @@
 "use client";
 import { useState, React } from "react";
 import { Placeholder } from "@public/index";
+import { FaSearch } from "react-icons/fa";
 import TrackComponent from "@components/TrackComponent/TrackComponent";
 import Album from "./_components/Album.js";
 import Artist from "./_components/Artist.js";
 import Audiobook from "./_components/Audiobook.js";
-import Episode from "./_components/Episode.js";
 import Playlist from "./_components/Playlist.js";
-import Show from "./_components/Show.js";
 
 import { useSearchParams } from "next/navigation";
 
 import "./search.css";
 
+export const formatText = ({ text, len = 20 }) => {
+  if (text.length > len) {
+    return text.substring(0, len) + "...";
+  }
+  return text;
+};
+
 const Search = () => {
   const searchParams = useSearchParams();
   const user_id = searchParams.get("id");
 
-  const allOptions = [
-    "Track",
-    "Artist",
-    "Album",
-    "Playlist",
-    "Show",
-    "Episode",
-    "Audiobook",
-  ];
-  const allOpt = [
-    "track",
-    "artist",
-    "album",
-    "playlist",
-    "show",
-    "episode",
-    "audiobook",
-  ];
+  const allOptions = ["Track", "Artist", "Album", "Playlist", "Audiobook"];
+  const allOpt = ["track", "artist", "album", "playlist", "audiobook"];
   const [searchType, setSearchType] = useState(allOpt);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const handleSearch = async () => {
     const response = await fetch("http://127.0.0.1:5000/api/v1/search", {
@@ -48,7 +39,7 @@ const Search = () => {
       body: JSON.stringify({
         searchType: searchType,
         searchQuery: searchTerm,
-        limit: 5,
+        limit: 10,
       }),
     });
     const data = await response.json();
@@ -70,19 +61,32 @@ const Search = () => {
     }
   };
 
+  const handleEnterKey = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSearch();
+    }
+  };
+
   return (
-    <div className="search-main">
+    <div className="search-main min-h-screen">
       <div className="search-wrapper">
-        <h1 className="search-header">Search</h1>
+        <h1 className="search-header text-5xl font-semibold mb-5">Search</h1>
         <div className="search-filter">
           <input
             type="text"
             placeholder="Search"
+            onKeyDown={handleEnterKey}
             onChange={(e) => {
               setSearchTerm(e.target.value);
             }}
+            required
+            className="text-black"
           />
-          <select onChange={handleSelectChange}>
+          <select
+            onChange={handleSelectChange}
+            className="search-select text-black"
+          >
             <option value="All">All</option>
             {allOptions.map((option) => (
               <option key={option} value={option}>
@@ -91,130 +95,105 @@ const Search = () => {
             ))}
           </select>
           <button className="search-button" onClick={handleSearch}>
-            Search
+            <FaSearch />
           </button>
         </div>
-
-        <div className="search-result-container">
-          <div className="track-search-container">
-            {searchResults.tracks && searchResults.tracks.length > 0 && (
-              <>
-                <h2>Tracks</h2>
-                {searchResults.tracks.map((result, index) => (
-                  <div key={index}>
-                    <TrackComponent track={result} i={index + 1} />
-                  </div>
-                ))}
-              </>
-            )}
-          </div>
-
-          <div className="artist-search-container">
-            {searchResults.albums && searchResults.artists.length > 0 && (
-              <>
-                <h2>Artists</h2>
-                {searchResults.artists.map((result, index) => (
-                  <div key={index}>
-                    <Artist artist={result} i={index + 1} />
-                  </div>
-                ))}
-              </>
-            )}
-          </div>
-
-          <div className="album-search-container">
-            {searchResults.albums && searchResults.albums.length > 0 && (
-              <>
-                <h2>Albums</h2>
-                {searchResults.albums.map((result, index) => (
-                  <div key={index}>
-                    <Album album={result} i={index + 1} />
-                  </div>
-                ))}
-              </>
-            )}
-          </div>
-
-          <div className="playlist-search-container">
-            {searchResults.playlists && searchResults.playlists.length > 0 && (
-              <>
-                <h2>Playlists</h2>
-                {searchResults.playlists.map((result, index) => (
-                  <div key={index}>
-                    <Playlist playlist={result} i={index + 1} />
-                  </div>
-                ))}
-              </>
-            )}
-          </div>
-
-          <div className="audiobook-search-container">
-            {searchResults.audiobooks &&
-              searchResults.audiobooks.length > 0 && (
+        {Object.keys(searchResults).length === 0 && (
+          <>
+            <h1 className="font-satoshi my-20 text-4xl sm:text-5xl font-semibold tracking-wider leading-[70px]">
+              A Place where <br />{" "}
+              <span className="text-blue-500">Everything</span> is Found
+            </h1>
+            <p className="text-xl">
+              Search for your favorite{" "}
+              <span className="bg-gradient-to-r from-white to to-blue-500 bg-clip-text text-transparent">
+                {" "}
+                Tracks, Artists, Albums, Playlists, and Audiobooks.
+              </span>{" "}
+              <br />
+              Which one are you looking for today?
+            </p>
+          </>
+        )}
+        {loading ? (
+          <div className="loading">Loading...</div>
+        ) : (
+          <div className="search-result-container">
+            <div className="track-search-container">
+              {searchResults.tracks && searchResults.tracks.length > 0 && (
                 <>
-                  <h2>Audiobooks</h2>
-                  {searchResults.audiobooks.map((result, index) => (
+                  <h2 className="text-3xl font-semibold">Tracks</h2>
+                  {searchResults.tracks.map((result, index) => (
                     <div key={index}>
-                      <Audiobook audiobook={result} i={index + 1} />
+                      <TrackComponent track={result} i={index + 1} />
                     </div>
                   ))}
                 </>
               )}
-          </div>
+            </div>
 
-          <div className="show-search-container">
-            {searchResults.shows && searchResults.shows.length > 0 && (
-              <>
-                <h2>Shows</h2>
-                {searchResults.shows.map((result, index) => (
-                  <div key={index}>
-                    <Show show={result} i={index + 1} />
-                  </div>
-                ))}
-              </>
+            {searchResults.artists && searchResults.artists.length > 0 && (
+              <div className="artist-search-container">
+                <h2 className="text-3xl font-semibold my-4">Artists</h2>
+                <div className="flex flex-wrap">
+                  {searchResults.artists.map((result, index) => (
+                    <div key={index}>
+                      <Artist artist={result} i={index + 1} />
+                    </div>
+                  ))}
+                </div>
+              </div>
             )}
-          </div>
 
-          <div className="episode-search-container">
-            {searchResults.episode && searchResults.episode.length > 0 && (
-              <>
-                <h2>Episodes</h2>
-                {searchResults.episode.map((result, index) => (
-                  <div key={index}>
-                    <Episode episode={result} i={index + 1} />
+            <div className="album-search-container">
+              {searchResults.albums && searchResults.albums.length > 0 && (
+                <>
+                  <h2 className="text-3xl font-semibold my-4">Albums</h2>
+                  <div className="flex flex-wrap">
+                    {searchResults.albums.map((result, index) => (
+                      <div key={index}>
+                        <Album album={result} i={index + 1} />
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </>
-            )}
+                </>
+              )}
+            </div>
+
+            <div className="playlist-search-container">
+              {searchResults.playlists &&
+                searchResults.playlists.length > 0 && (
+                  <>
+                    <h2 className="text-3xl font-semibold my-4">Playlists</h2>
+                    <div className="flex flex-wrap">
+                      {searchResults.playlists.map((result, index) => (
+                        <div key={index}>
+                          <Playlist playlist={result} i={index + 1} />
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+            </div>
+
+            <div className="audiobook-search-container">
+              {searchResults.audiobooks &&
+                searchResults.audiobooks.length > 0 && (
+                  <>
+                    <h2 className="text-3xl font-semibold my-4">Audiobooks</h2>
+                    {searchResults.audiobooks.map((result, index) => (
+                      <div key={index}>
+                        <Audiobook audiobook={result} i={index + 1} />
+                      </div>
+                    ))}
+                  </>
+                )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
 };
-
-// const Track = ({ track, i }) => {
-//   const calcDuration = () => {
-//     const d_s = track.duration / 1000;
-//     const min = Math.floor(d_s / 60);
-//     const sec = Math.floor(d_s % 60).toString().padStart(2, '0');
-//     return `${min}:${sec}`;
-//   }
-
-//   return (
-//     <div className="search-result-container">
-//       <p>{i}</p>
-//       <a>Like</a>
-//       <img className="image" src={Placeholder} alt="Track Image" />
-//       <div className="title-artist">
-//         <p>{track.name}</p>
-//         <a href={track.artist_name_url[1]}>{track.artist_name_url[0]}</a>
-//       </div>
-//       <p>{calcDuration()}</p>
-//       <a href={track.spotify_link}>Open</a>
-//       <a>Add to Playlist</a>
-//     </div>
-//   )
-// }
 
 export default Search;

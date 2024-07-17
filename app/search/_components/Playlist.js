@@ -1,5 +1,6 @@
 import { PlaylistPlaceholder } from "@public/index";
 import { MdOpenInNew } from "react-icons/md";
+import { formatText } from "../page";
 import "./styles/playlist-search.css";
 
 const Playlist = ({ playlist, i }) => {
@@ -9,7 +10,7 @@ const Playlist = ({ playlist, i }) => {
         src={playlist.images ? playlist.images : PlaylistPlaceholder}
         alt={playlist.name}
       />
-      <h3>{playlist.name}</h3>
+      <h3>{formatText({ text: playlist.name })}</h3>
       <a href={playlist.spotify_link}>
         Spotify &nbsp; <MdOpenInNew />
       </a>

@@ -38,7 +38,7 @@ class SpotifySearch:
                 followers = item.get("followers", {}).get("total")
                 genres = item.get("genres", [])
                 if search_type == 'track':
-                    images = item.get("album", {}).get("images", [])[0].get("url") if item.get("album") else None
+                    images = item.get("album", {}).get("images", [])[1].get("url") if item.get("album") else None
                 else:
                     images = item.get("images", [])[0].get("url") if item.get("images") else None
 
