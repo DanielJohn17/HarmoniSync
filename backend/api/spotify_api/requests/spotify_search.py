@@ -37,9 +37,8 @@ class SpotifySearch:
                 duration = item.get("duration_ms")
                 followers = item.get("followers", {}).get("total")
                 genres = item.get("genres", [])
-                images = item.get("album", {}).get("images", [])[0].get("url") \
-                        if search_type == 'track' else item.get("images", [])[0].get("url")\
-                         if item.get("images", []) else None
+                images = item.get("images", [])[0].get("url") if search_type != 'track' \
+                            else item.get("album", []).get("images", [])[0].get("url") if item.get("album") else None
 
                 spotify_link = item.get("external_urls", {}).get("spotify")
 
