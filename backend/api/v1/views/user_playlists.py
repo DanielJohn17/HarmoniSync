@@ -41,13 +41,14 @@ def create_playlist(user_id):
         return jsonify({"error": "Missing data"}), 400
 
     new_playlist = Playlist(name=name, description=description, user_id=user_id)
+    dic = new_playlist.to_dict()
 
     try:
         new_playlist.save_db()
     except:
         return jsonify({"error": "Could not create playlist"}), 400
     
-    return jsonify({"message": "Playlist Created!"}), 201
+    return jsonify(dic), 201
 
 # Get playlist by id route
 @app_view.route("/users/<user_id>/playlists/<playlist_id>", methods=["GET"])
@@ -118,9 +119,14 @@ def update_playlist(user_id, playlist_id):
 
 
 # create liked song playlist
-@app_view.route("/users/<user_id>/playlists/create_liked_songs_playlist", methods=["GET"])
+@app_view.route("/users/<user_id>/playlists/create_liked_songs_playlist", methods=["POST"])
 def create_liked_songs_playlist(user_id):
     '''Create liked songs playlist route'''
+    data = request.get_json()
+    
+    id = data.get("id")
+    if not id:
+        return jsonify({"error": "Missing data"}), 400
 
     user = storage.get("User", user_id, None)
     if not user:
@@ -130,7 +136,7 @@ def create_liked_songs_playlist(user_id):
         if playlist.name == "Liked Songs":
             return jsonify(playlist.to_dict()), 200
 
-    liked_songs_playlist = Playlist(name="Liked Songs", description="Liked songs playlist", user_id=user_id)
+    liked_songs_playlist = Playlist(id=id, name="Liked Songs", description="Liked songs playlist", user_id=user_id)
     dic = liked_songs_playlist.to_dict()
 
     try:

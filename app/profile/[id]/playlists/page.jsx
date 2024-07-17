@@ -38,7 +38,13 @@ const PlayList = ({ params }) => {
 
   useEffect(() => {
     const fetchPlaylists = async () => {
-      const liked_songs = await fetch(`http://localhost:5000/api/v1/users/${params.id}/playlists/create_liked_songs_playlist`);
+      const liked_songs = await fetch(`http://localhost:5000/api/v1/users/${params.id}/playlists/create_liked_songs_playlist`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: "1" }),
+      });
 
       const response = await fetch(
         `http://localhost:5000/api/v1/users/${params.id}/playlists`
