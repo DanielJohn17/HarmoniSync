@@ -9,9 +9,8 @@ class User(BaseModel, db.Model):
 
     id = db.Column(db.String(60), primary_key=True)
     email = db.Column(db.String(60), unique=True, nullable=False)
-    DOB = db.Column(db.String(60), nullable=False)
     full_name = db.Column(db.String(60), nullable=False)
-    password = db.Column(db.LargeBinary(128), nullable=False)
+    image = db.Column(db.String(255), nullable=True)
 
     playlists = db.relationship("Playlist", backref="user", cascade="all, delete")
 

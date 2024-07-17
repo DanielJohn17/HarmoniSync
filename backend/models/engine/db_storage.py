@@ -2,8 +2,9 @@
 from config import db
 from models.user import User
 from models.playlist import Playlist
+from models.track import Track
 
-classes = {"User": User, "Playlist": Playlist}
+classes = {"User": User, "Playlist": Playlist, "Track": Track}
 
 class DBStorage:
     def __init__(self):
@@ -33,8 +34,12 @@ class DBStorage:
     def close(self):
         self.__session.close()
 
-    def get(self, cls, id):
+    def get(self, cls, id=None, email=None):
         if cls in classes.keys():
+            if email:
+                obj = classes[cls].query.filter_by(email=email).first()
+                return obj
+            
             obj = classes[cls].query.get(id)
             return obj
         
