@@ -116,5 +116,19 @@
 }
 
 .glassmorphism {
-  @apply rounded-xl border border-gray-200 bg-white/20 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur p-5;
+  @apply rounded-xl border border-gray-200 bg-black/20 shadow-[inset_10px_-50px_94px_0_rgb(50,50,50,0.2)] backdrop-blur p-5;
+}
+
+/* Form Component */
+.form_textarea {
+  @apply w-full flex rounded-lg h-[200px] mt-2 p-3 text-sm text-gray-500 outline-0;
+}
+
+.form_input {
+  @apply w-full flex rounded-lg mt-2 p-3 text-sm text-gray-500 outline-0;
+}
+
+/* PlaylistCard */
+.playlist_card {
+  @apply bg-black/20 rounded-xl shadow-lg p-5 h-[250px] w-[200px] flex flex-col items-center gap-3 hover:bg-white/5 cursor-pointer transition-colors duration-200;
 }

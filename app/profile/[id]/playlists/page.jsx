@@ -3,24 +3,21 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { PlaylistIcon } from "@public";
 
 const PlayListsCard = ({ data, handleTagClick }) => {
   return (
-    <div className="">
+    <section className="min-h-screen flex flex-wrap gap-4 px-16">
       {data.length > 0 ? (
         data.map((playlist) => (
-          <div key={playlist.id} className="playlist-card">
+          <div key={playlist.id} className="playlist_card" onClick={() => handleTagClick(playlist.id)}>
             <Image
-              src={playlist.image}
+              src={PlaylistIcon}
               alt={playlist.name}
-              width={100}
-              height={100}
+              width={150}
+              height={150}
             />
-            <h3>{playlist.name}</h3>
-            <p>{playlist.description}</p>
-            <button onClick={() => handleTagClick(playlist.id)}>
-              View Playlist
-            </button>
+            <h3 className="text-left">{playlist.name}</h3>
           </div>
         ))
       ) : (
@@ -30,7 +27,7 @@ const PlayListsCard = ({ data, handleTagClick }) => {
           </p>
         </div>
       )}
-    </div>
+    </section>
   );
 };
 
@@ -41,6 +38,8 @@ const PlayList = ({ params }) => {
 
   useEffect(() => {
     const fetchPlaylists = async () => {
+      const liked_songs = await fetch(`http://localhost:5000/api/v1/users/${params.id}/playlists/create_liked_songs_playlist`);
+
       const response = await fetch(
         `http://localhost:5000/api/v1/users/${params.id}/playlists`
       );
@@ -58,7 +57,7 @@ const PlayList = ({ params }) => {
 
   return (
     <section className="flex flex-col">
-      <div className="pt-16 pb-6 mb-48 px-24 flex justify-between items-center shadow-[5px_95px_100px_rgba(255,255,255,0.15)]">
+      <div className="pt-16 pb-6 mb-11 px-24 flex justify-between items-center shadow-[5px_95px_100px_rgba(255,255,255,0.15)]">
         <h1 className="text-3xl sm:text-5xl font-bold">My Playlists</h1>
         <button
           type="button"

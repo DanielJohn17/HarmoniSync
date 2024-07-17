@@ -14,7 +14,7 @@ const CreatePlaylist = ({ params }) => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/v1//users/${params.id}/playlists/create_playlist`,
+        `http://localhost:5000/api/v1/users/${params.id}/playlists/create_playlist`,
         {
           method: "POST",
           headers: {
