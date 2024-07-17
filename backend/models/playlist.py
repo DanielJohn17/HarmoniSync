@@ -13,7 +13,7 @@ class Playlist(BaseModel, db.Model):
     __tablename__ = "Playlist"
 
     id = db.Column(db.String(60), primary_key=True)
-    name = db.Column(db.String(60), nullable=False)
+    name = db.Column(db.String(60), nullable=False, unique=True)
     description = db.Column(db.String(60), nullable=False)
     user_id = db.Column(db.String(60), db.ForeignKey("User.id"), nullable=False)
     musics = db.relationship("Track", secondary="playlist_track", backref="playlist")
