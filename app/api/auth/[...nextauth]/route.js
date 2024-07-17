@@ -41,6 +41,20 @@ const handler = NextAuth({
           }
         );
 
+        if (newUserResponse.ok) {
+          const data = await newUserResponse.json();
+          const liked_songs = await fetch(
+            `http://localhost:5000/api/v1/users/${data.id}/playlists/create_liked_songs_playlist`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ id: "1" }),
+            }
+          );
+        }
+
         return true;
       } catch (error) {
         console.log("Error signing in", error);

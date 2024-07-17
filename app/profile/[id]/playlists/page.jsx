@@ -10,7 +10,11 @@ const PlayListsCard = ({ data, handleTagClick }) => {
     <section className="min-h-screen flex flex-wrap gap-4 px-16">
       {data.length > 0 ? (
         data.map((playlist) => (
-          <div key={playlist.id} className="playlist_card" onClick={() => handleTagClick(playlist.id)}>
+          <div
+            key={playlist.id}
+            className="playlist_card"
+            onClick={() => handleTagClick(playlist.id)}
+          >
             <Image
               src={PlaylistIcon}
               alt={playlist.name}
@@ -38,14 +42,6 @@ const PlayList = ({ params }) => {
 
   useEffect(() => {
     const fetchPlaylists = async () => {
-      const liked_songs = await fetch(`http://localhost:5000/api/v1/users/${params.id}/playlists/create_liked_songs_playlist`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: "1" }),
-      });
-
       const response = await fetch(
         `http://localhost:5000/api/v1/users/${params.id}/playlists`
       );
