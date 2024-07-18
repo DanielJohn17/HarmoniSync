@@ -136,7 +136,7 @@ def create_liked_songs_playlist(user_id):
         if playlist.name == "Liked Songs":
             return jsonify(playlist.to_dict()), 200
 
-    liked_songs_playlist = Playlist(id=id, name="Liked Songs", description="Liked songs playlist", user_id=user_id)
+    liked_songs_playlist = Playlist(id=id, name="Liked Songs", description="Your liked songs playlist", user_id=user_id)
     dic = liked_songs_playlist.to_dict()
 
     try:

@@ -49,6 +49,7 @@ def add_track_to_playlist(user_id, playlist_id):
         return jsonify({"error": "Track already in playlist"}), 400
     
     new_track = Track(id=track_id)
+    playlist.musics.append(new_track)
 
     try:
         new_track.save_db()
