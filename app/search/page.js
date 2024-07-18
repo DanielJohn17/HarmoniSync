@@ -31,6 +31,7 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
 
   const handleSearch = async () => {
+    setLoading(true);
     const response = await fetch("http://127.0.0.1:5000/api/v1/search", {
       method: "POST",
       headers: {
@@ -50,6 +51,7 @@ const Search = () => {
       console.log(data);
       console.log(user_id);
     }
+    setLoading(false);
   };
 
   const handleSelectChange = (e) => {

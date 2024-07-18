@@ -1,24 +1,47 @@
 import { Placeholder } from "@public/index";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import { CiCircleMore, CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
 import { MdOpenInNew } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
 import { formatText } from "@app/search/page";
+import Notify from "@components/NotificationSlider/Notify";
 import Image from "next/image";
 
 import "./TrackComp.css";
 
 const TrackComponent = ({ track, i }) => {
   const [isOptionOpen, setIsOptionOpen] = useState(false);
+  const [isPlaylistOpen, setIsPlaylistOpen] = useState(false);
+  const [userPlaylists, setUserPlaylists] = useState([]);
+  const [isNotificationVisible, setNotificationVisible] = useState(false);
+  const { data: session } = useSession();
 
   const handleOptionClick = () => {
     setIsOptionOpen(!isOptionOpen);
   };
 
-  const handleLike = async () => {
+  const openUserPlaylists = () => {
+    setIsPlaylistOpen(!isPlaylistOpen);
+  };
+
+  const fetchUserPlaylist = async () => {
+    const res = await fetch(
+      `http://127.0.0.1:5000/api/v1/users/${session.user.id}/playlists`
+    );
+    const data = await res.json();
+    console.log("Playlists: " + data);
+    if (data.error) {
+      console.log("Error Fetching Playlist.");
+    } else {
+      setUserPlaylists(data);
+    }
+  };
+
+  const handlePlaylist = async ({ id }) => {
     const response = await fetch(
-      `http://127.0.0.1:5000/api/v1/users/${dummyUserID}/playlists/${dummyLikedPlaylistID}/tracks/add_track`,
+      `http://127.0.0.1:5000/api/v1/users/${session.user.id}/playlists/${id}/tracks/add_track`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -31,11 +54,24 @@ const TrackComponent = ({ track, i }) => {
     if (data.error) {
       alert(data.error);
     } else {
-      alert("Liked");
+      alert("Added to Playlist");
+      setIsOptionOpen(false);
+      showNotification();
     }
   };
 
-  const handlePlaylist = () => {};
+  const showNotification = () => {
+    setNotificationVisible(true);
+    setTimeout(() => {
+      setNotificationVisible(false);
+    }, 2000);
+  };
+
+  useEffect(() => {
+    if (session) {
+      fetchUserPlaylist();
+    }
+  }, []);
 
   const calcDuration = () => {
     const d_s = track.duration / 1000;
@@ -69,20 +105,44 @@ const TrackComponent = ({ track, i }) => {
           <MdOpenInNew />
         </a>
         <div className="dropdown">
-          <button>
-            <CiCircleMore onClick={handleOptionClick} />
-          </button>
-          {isOptionOpen && (
-            <div className="dropdown-menu">
-              <a className="like-track" onClick={handleLike}>
-                <FaHeart />
-                &nbsp;Like
-              </a>
-              <a onClick={handlePlaylist}>
-                Add to Playlist &nbsp; <IoIosArrowForward />
-              </a>
-            </div>
+          {session && (
+            <button>
+              <CiCircleMore onClick={handleOptionClick} />
+            </button>
           )}
+
+          {isOptionOpen && (
+            <>
+              <div className="dropdown-menu">
+                <a
+                  className="like-track"
+                  onClick={() => handlePlaylist({ id: 1 })}
+                >
+                  <FaHeart />
+                  &nbsp;Like
+                </a>
+                <a onClick={openUserPlaylists}>
+                  Add to Playlist &nbsp; <IoIosArrowForward />
+                </a>
+              </div>
+
+              <div className="playlist-dropdown-menu">
+                {isPlaylistOpen &&
+                  userPlaylists.map((playlist) => (
+                    <a
+                      key={playlist.id}
+                      onClick={() => handlePlaylist({ id: playlist.id })}
+                    >
+                      {playlist.name}
+                    </a>
+                  ))}
+              </div>
+            </>
+          )}
+          <Notify
+            message="Track added to Playlist"
+            isVisible={isNotificationVisible}
+          />
         </div>
       </div>
     </>
