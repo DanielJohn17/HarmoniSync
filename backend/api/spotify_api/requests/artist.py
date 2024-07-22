@@ -33,6 +33,7 @@ class GetArtist:
 
         params = {
             "limit": limit,
+            "include_groups": "album,single",
         }
 
         result = requests.get(url, headers=headers, params=params)
@@ -48,6 +49,7 @@ class GetArtist:
             albums_content.append({
                 "id": album["id"],
                 "name": album["name"],
+                "type": album["album_type"],
                 "release_date": album["release_date"],
                 "total_tracks": album.get("total_tracks"),
                 "spotify_link": album.get("external_urls", {}).get("spotify"),
@@ -79,9 +81,10 @@ class GetArtist:
                 "name": track["name"],
                 "track_number": track["track_number"],
                 "explicit": track["explicit"],
-                "duration_ms": track["duration_ms"],
+                "duration": track["duration_ms"],
                 "spotify_link": track["external_urls"]["spotify"],
                 "preview_url": track["preview_url"],
+                "images": track.get("album", {}).get("images", [])[0].get("url") if track.get("album", {}).get("images", []) else None,
                 "artists": [
                     {
                         "id": artist["id"],
