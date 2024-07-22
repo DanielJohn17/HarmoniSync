@@ -1,17 +1,17 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { FaSpotify } from "react-icons/fa";
 import TrackComponent from "@components/TrackComponent/TrackComponent";
 import "./album.css";
 
-const Album = () => {
-  const dummyAlbumID = "5SSWz9CYy5oZp20GAWWBio";
+const Album = ({ params }) => {
   const [album, setAlbum] = useState({});
 
   const fetchAlbum = async () => {
     try {
       const responose = await fetch(
-        "http://127.0.0.1:5000/api/v1/albums/" + dummyAlbumID
+        "http://127.0.0.1:5000/api/v1/albums/" + params.id
       );
       if (responose.ok) {
         const data = await responose.json();
@@ -37,21 +37,37 @@ const Album = () => {
         <Image
           src={album.images}
           alt="Album Image"
-          width={200}
-          height={200}
+          width={300}
+          height={300}
           className="album-image"
         />
         <div className="album-info">
           <div className="album-title">
             <h1>{album.name}</h1>
+            <a
+              className="spotify_link"
+              href={album.spotify_link}
+              target="_blank"
+            >
+              <FaSpotify /> Open in Spotify
+            </a>
           </div>
-          {album.artists &&
-            album.artists.map((artist, index) => (
-              <a key={index} href={artist.spotify_link}>
-                {artist.name} &nbsp;
-              </a>
-            ))}
-          <p>Released Date: {album.release_date}</p>
+          <div className="album-artist-names">
+            {album.artists &&
+              album.artists.length > 0 &&
+              album.artists.map((artist, index) => (
+                <span key={index}>
+                  <a
+                    href={`/artist/${artist.id}`}
+                    className="album-artist-name"
+                  >
+                    {artist.name}
+                  </a>
+                  {index !== album.artists.length - 1 && ",\u00A0"}
+                </span>
+              ))}
+          </div>
+          <p className="album-release">Released Date: {album.release_date}</p>
         </div>
       </div>
       <h2>Tracks</h2>
