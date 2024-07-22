@@ -26,7 +26,7 @@ class GetAlbum:
                 "id": track.get("id"),
                 "name": track.get("name"),
                 "preview_url": track.get("preview_url"),
-                "duration_ms": track.get("duration_ms"),
+                "duration": track.get("duration_ms"),
                 "track_number": track.get("track_number"),
                 "spotify_link": track.get("external_urls", {}).get("spotify"),
                 "explicit": track.get("explicit"),
@@ -39,6 +39,8 @@ class GetAlbum:
                 ]
             })
         
+        album_content['name'] = json_result.get("name")
+        album_content['release_date'] = json_result.get("release_date")
         album_content["total_tracks"] = json_result.get("total_tracks")
         album_content["spotify_link"] = json_result.get("external_urls", {}).get("spotify")
         album_content["images"] = json_result.get("images", [])[0].get("url") if json_result.get("images", []) else None

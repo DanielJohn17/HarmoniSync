@@ -35,7 +35,7 @@ class GetTrack:
         track_content["id"] = json_result.get("id")
         track_content["name"] = json_result.get("name")
         track_content["preview_url"] = json_result.get("preview_url")
-        track_content["duration_ms"] = json_result.get("duration_ms")
+        track_content["duration"] = json_result.get("duration_ms")
         track_content["track_number"] = json_result.get("track_number")
         track_content["spotify_link"] = json_result.get("external_urls", {}).get("spotify")
         track_content["explicit"] = json_result.get("explicit")

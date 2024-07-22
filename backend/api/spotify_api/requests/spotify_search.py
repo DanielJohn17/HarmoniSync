@@ -39,16 +39,11 @@ class SpotifySearch:
                 genres = item.get("genres", [])
                 if search_type == 'track':
                     images = item.get("album", {}).get("images", [])[1].get("url") if item.get("album") else None
+                    artists = item.get('artists')
                 else:
                     images = item.get("images", [])[0].get("url") if item.get("images") else None
 
                 spotify_link = item.get("external_urls", {}).get("spotify")
-
-                artists = item.get('artists')
-                if artists and len(artists) > 0:
-                    artist_name_url = [artists[0].get('name'), artists[0].get('external_urls', {}).get('spotify')]
-                else:
-                    artist_name_url = [None, None]
 
                 final_items.append({
                     "id": item_id,
@@ -59,7 +54,7 @@ class SpotifySearch:
                     "type": search_type,
                     "images": images,
                     "spotify_link": spotify_link,
-                    "artist_name_url": artist_name_url,
+                    "artists": artists,
                 })
             search_results[search_type + 's'] = final_items
 
