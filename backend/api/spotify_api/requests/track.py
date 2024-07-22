@@ -39,6 +39,7 @@ class GetTrack:
         track_content["track_number"] = json_result.get("track_number")
         track_content["spotify_link"] = json_result.get("external_urls", {}).get("spotify")
         track_content["explicit"] = json_result.get("explicit")
+        track_content["album_name"] = json_result.get("album", {}).get("name")
         track_content["artists"] = [
             {
                 "id": artist.get("id"),
@@ -47,6 +48,7 @@ class GetTrack:
             } for artist in json_result.get("artists", [])
         ]
 
+        print(track_content["album_name"])
         return track_content
 
 class GetRecommendation:
@@ -55,7 +57,7 @@ class GetRecommendation:
             "id": track.get("id"),
             "name": track.get("name"),
             "preview_url": track.get("preview_url"),
-            "duration_ms": track.get("duration_ms"),
+            "duration": track.get("duration_ms"),
             "track_number": track.get("track_number"),
             "spotify_link": track.get("external_urls", {}).get("spotify"),
             "explicit": track.get("explicit"),
