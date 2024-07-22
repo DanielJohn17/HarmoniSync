@@ -1,6 +1,7 @@
 import { Placeholder } from "@public/index";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { CiCircleMore, CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
 import { MdOpenInNew } from "react-icons/md";
@@ -17,6 +18,7 @@ const TrackComponent = ({ track, i }) => {
   const [userPlaylists, setUserPlaylists] = useState([]);
   const [isNotificationVisible, setNotificationVisible] = useState(false);
   const { data: session } = useSession();
+  const router = useRouter();
 
   const handleOptionClick = () => {
     setIsOptionOpen(!isOptionOpen);
@@ -82,17 +84,24 @@ const TrackComponent = ({ track, i }) => {
     return `${min}:${sec}`;
   };
 
+  const handleArtistClick = (id) => {
+    router.push(`/artist/${id}`);
+  };
+
   return (
     <>
       <div className="track-container">
         <p className="track-number">{i}</p>
-        <Image
-          className="track-image"
-          src={track.images ? track.images : Placeholder}
-          alt="Track Image"
-          width={32}
-          height={32}
-        />
+        {track.images && (
+          <Image
+            className="rounded-md"
+            src={track.images}
+            alt="Track Image"
+            width={75}
+            height={75}
+          />
+        )}
+
         <div className="track-title-container">
           <p>{formatText({ text: track.name })}</p>
 
@@ -100,15 +109,19 @@ const TrackComponent = ({ track, i }) => {
             {track.artists &&
               track.artists.length > 0 &&
               track.artists.map((artist, index) => (
-                <a href={artist.spotify_link} key={index}>
+                <div
+                  onClick={() => handleArtistClick(artist.id)}
+                  key={index}
+                  className="artist_div"
+                >
                   {formatText({ text: artist.name })}
                   {index !== track.artists.length - 1 && ",\u00A0"}
-                </a>
+                </div>
               ))}
           </div>
         </div>
         <p>{calcDuration()}</p>
-        <a href={track.spotify_link}>
+        <a href={track.spotify_link} target="_blank">
           Spotify&nbsp;
           <MdOpenInNew />
         </a>
