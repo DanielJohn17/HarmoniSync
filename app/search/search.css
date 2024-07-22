@@ -1,4 +1,5 @@
 .search-wrapper {
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -81,18 +82,6 @@
 
 .search-filter > option:hover {
   background-color: white;
-}
-
-.search-result-container {
-  width: 90%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: start;
-  margin-top: 20px;
-  border-radius: 20px;
-  padding: 2rem;
 }
 
 .search-input {
