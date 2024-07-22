@@ -8,28 +8,27 @@ import "./album.css";
 const Album = ({ params }) => {
   const [album, setAlbum] = useState({});
 
-  const fetchAlbum = async () => {
-    try {
-      const responose = await fetch(
-        "http://127.0.0.1:5000/api/v1/albums/" + params.id
-      );
-      if (responose.ok) {
-        const data = await responose.json();
-        console.log(data);
-        setAlbum(data);
-      } else {
-        console.log("Error Fetching Album");
-      }
-    } catch (error) {
-      console.log("Error Fetching Album: " + error);
-    }
-  };
-
   useEffect(() => {
+    const fetchAlbum = async () => {
+      try {
+        const responose = await fetch(
+          "http://127.0.0.1:5000/api/v1/albums/" + params.id
+        );
+        if (responose.ok) {
+          const data = await responose.json();
+          console.log(data);
+          setAlbum(data);
+        } else {
+          console.log("Error Fetching Album");
+        }
+      } catch (error) {
+        console.log("Error Fetching Album: " + error);
+      }
+    };
     fetchAlbum();
-  }, []);
+  }, [params.id]);
 
-  // if (!album.name) return <div>Loading...</div>;
+  if (!album.name) return <div>Loading...</div>;
 
   return (
     <div className="album-main">
