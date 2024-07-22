@@ -88,6 +88,10 @@ const TrackComponent = ({ track, i }) => {
     router.push(`/artist/${id}`);
   };
 
+  const handleNameClick = (id) => {
+    router.push(`/track/${id}`);
+  };
+
   return (
     <>
       <div className="track-container">
@@ -103,7 +107,9 @@ const TrackComponent = ({ track, i }) => {
         )}
 
         <div className="track-title-container">
-          <p>{formatText({ text: track.name })}</p>
+          <p onClick={() => handleNameClick(track.id)}>
+            {formatText({ text: track.name })}
+          </p>
 
           <div className="track-artist-container">
             {track.artists &&
