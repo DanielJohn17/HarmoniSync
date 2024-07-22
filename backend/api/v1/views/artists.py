@@ -19,7 +19,7 @@ def get_artist(artist_id):
 def get_artist_albums(artist_id):
     '''Get artist albums route'''
 
-    limit = request.args.get("limit", 30)
+    limit = request.args.get("limit", 20)
     artist_albums = artist.get_artist_albums(artist_id, limit)
     if "error" in artist_albums:
         return jsonify({"error": "Failed to retrieve data"}), 500
