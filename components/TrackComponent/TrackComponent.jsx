@@ -86,7 +86,7 @@ const TrackComponent = ({ track, i }) => {
     <>
       <div className="track-container">
         <p className="track-number">{i}</p>
-        <img
+        <Image
           className="track-image"
           src={track.images ? track.images : Placeholder}
           alt="Track Image"
@@ -95,9 +95,17 @@ const TrackComponent = ({ track, i }) => {
         />
         <div className="track-title-container">
           <p>{formatText({ text: track.name })}</p>
-          <a href={track.artist_name_url[1]}>
-            {formatText({ text: track.artist_name_url[0] })}
-          </a>
+
+          <div className="track-artist-container">
+            {track.artists &&
+              track.artists.length > 0 &&
+              track.artists.map((artist, index) => (
+                <a href={artist.spotify_link} key={index}>
+                  {formatText({ text: artist.name })}
+                  {index !== track.artists.length - 1 && ",\u00A0"}
+                </a>
+              ))}
+          </div>
         </div>
         <p>{calcDuration()}</p>
         <a href={track.spotify_link}>

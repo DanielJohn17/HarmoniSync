@@ -64,10 +64,15 @@
   color: var(--color-white);
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .track-container a:hover {
   color: var(--color-primary);
+}
+
+.track-artist-container {
+  display: flex;
 }
 
 .dropdown button {
