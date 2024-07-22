@@ -100,11 +100,11 @@ const Artist = ({ params }) => {
             width={250}
             height={250}
             alt="artist image"
-            className="rounded-full object-contain"
+            className="object-contain rounded-full"
           />
         </div>
 
-        <div className="w-full flex flex-col justify-between">
+        <div className="w-full flex flex-col justify-end">
           <div className="max-w-[800px] flex justify-between items-center">
             <h1 className="text-5xl lg:text-7xl font-satoshi font-semibold tracking-wide text-left ">
               {artist.name}
@@ -124,7 +124,9 @@ const Artist = ({ params }) => {
               {artist.genres &&
                 artist.genres.map((genre, index) => (
                   <span key={index} className="text-xl font-light">
-                    {index === artist.genres.length - 1 ? genre : `${genre}, `}
+                    {index === artist.genres.length - 1
+                      ? genre.slice(0, 1).toUpperCase() + genre.slice(1)
+                      : `${genre.slice(0, 1).toUpperCase() + genre.slice(1)}, `}
                   </span>
                 ))}
             </div>
