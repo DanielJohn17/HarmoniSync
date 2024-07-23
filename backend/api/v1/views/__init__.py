@@ -12,3 +12,4 @@ from api.v1.views.playlist_tracks import *
 from api.v1.views.tracks import *
 from api.v1.views.artists import *
 from api.v1.views.lyrics import *
+from api.v1.views.genre import *
