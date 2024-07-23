@@ -21,15 +21,15 @@
   text-align: center;
 }
 
-.search-album-container img {
-  width: 120px;
-  height: 120px;
+.search-album-container Image {
+  width: auto;
+  height: auto;
   border: 2px solid white;
   border-radius: 50%;
   margin-bottom: 10px;
 }
 
-.search-album-container img:hover {
+.search-album-container Image:hover {
   border: 2px solid var(--color-secondary);
 }
 

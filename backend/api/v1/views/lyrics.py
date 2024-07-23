@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 import os
 import time
 
-
 load_dotenv()
 GENIUS_TOKEN = os.getenv("GENIUS_TOKEN")
 
@@ -23,7 +22,7 @@ def get_lyrics():
     max_attempts = 5
     song = None
 
-    while attempt < max_attempts and song is None:
+    while attempt < max_attempts:
         try:
             song = genius.search_song(song_name, artist_name)
             if song:
@@ -37,4 +36,4 @@ def get_lyrics():
             time.sleep(2 ** attempt)  # Exponential backoff
             attempt += 1
 
-    return jsonify({"error": "Failed to retrieve data"}), 500
+    return jsonify({"error": "Failed to retrieve lyrics after several attempts"}), 500

@@ -1,13 +1,11 @@
 "use client";
-import { useState, React } from "react";
+import { useState, useEffect } from "react";
 import { Placeholder } from "@public/index";
 import { FaSearch } from "react-icons/fa";
 import TrackComponent from "@components/TrackComponent/TrackComponent";
 import Album from "./_components/Album.js";
 import Artist from "./_components/Artist.js";
-import Audiobook from "./_components/Audiobook.js";
-import Playlist from "./_components/Playlist.js";
-import loading from "@app/loading.js";
+import Loading from "@app/loading.js";
 
 import { useSearchParams } from "next/navigation";
 
@@ -24,50 +22,59 @@ const Search = () => {
   const searchParams = useSearchParams();
   const user_id = searchParams.get("id");
 
-  const allOptions = ["Track", "Artist", "Album", "Playlist", "Audiobook"];
-  const allOpt = ["track", "artist", "album", "playlist", "audiobook"];
+  const allOptions = ["Track", "Artist", "Album"];
+  const allOpt = ["track", "artist", "album"];
+
   const [searchType, setSearchType] = useState(allOpt);
+  const [isSearching, setIsSearching] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSearch = async () => {
-    setIsLoading(true);
-    const response = await fetch("http://127.0.0.1:5000/api/v1/search", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        searchType: searchType,
-        searchQuery: searchTerm,
-        limit: 10,
-      }),
-    });
-    const data = await response.json();
-    if (data.error) {
-      console.log(data.error);
-    } else {
-      setSearchResults(data);
-      console.log(data);
-      console.log(user_id);
-    }
-    setIsLoading(false);
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch("http://127.0.0.1:5000/api/v1/search", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            searchType: searchType,
+            searchQuery: searchTerm,
+            limit: 10,
+          }),
+        });
+        const data = await response.json();
+        setSearchResults(data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsSearching(false);
+        setIsLoading(false);
+      }
+    };
 
-  const handleSelectChange = (e) => {
-    const selectedOption = e.target.value;
-    if (selectedOption === "All") {
+    fetchData();
+  }, [isSearching]);
+
+  const handleSelectChange = (value) => {
+    if (value === "All") {
       setSearchType(allOpt);
     } else {
-      setSearchType([selectedOption.toLowerCase()]);
+      setSearchType([value.toLowerCase()]);
     }
+  };
+
+  const handleSearchClick = () => {
+    setIsSearching(true);
   };
 
   const handleEnterKey = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      handleSearch();
+      handleSearchClick();
     }
   };
 
@@ -87,7 +94,7 @@ const Search = () => {
             className="text-black"
           />
           <select
-            onChange={handleSelectChange}
+            onChange={(e) => handleSelectChange(e.target.value)}
             className="search-select text-black"
           >
             <option value="All">All</option>
@@ -97,7 +104,7 @@ const Search = () => {
               </option>
             ))}
           </select>
-          <button className="search-button" onClick={handleSearch}>
+          <button className="search-button" onClick={handleSearchClick}>
             <FaSearch />
           </button>
         </div>
@@ -115,7 +122,7 @@ const Search = () => {
               Search for your favorite{" "}
               <span className="bg-gradient-to-r from-white to to-blue-500 bg-clip-text text-transparent">
                 {" "}
-                Tracks, Artists, Albums, Playlists, and Audiobooks.
+                Tracks, Artists and Albums
               </span>{" "}
               <br />
               Which one are you looking for today?
@@ -127,7 +134,7 @@ const Search = () => {
       <div className="w-full px-40">
         {isLoading ? (
           <div>
-            <loading />
+            <Loading />
           </div>
         ) : (
           <div className="w-full flex flex-col gap-12">
@@ -170,36 +177,6 @@ const Search = () => {
                   </div>
                 </>
               )}
-            </div>
-
-            <div className="playlist-search-container">
-              {searchResults.playlists &&
-                searchResults.playlists.length > 0 && (
-                  <>
-                    <h2 className="text-3xl font-semibold my-4">Playlists</h2>
-                    <div className="flex flex-wrap">
-                      {searchResults.playlists.map((result, index) => (
-                        <div key={index}>
-                          <Playlist playlist={result} i={index + 1} />
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                )}
-            </div>
-
-            <div className="audiobook-search-container">
-              {searchResults.audiobooks &&
-                searchResults.audiobooks.length > 0 && (
-                  <>
-                    <h2 className="text-3xl font-semibold my-4">Audiobooks</h2>
-                    {searchResults.audiobooks.map((result, index) => (
-                      <div key={index}>
-                        <Audiobook audiobook={result} i={index + 1} />
-                      </div>
-                    ))}
-                  </>
-                )}
             </div>
           </div>
         )}

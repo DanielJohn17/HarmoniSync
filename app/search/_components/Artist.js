@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ArtistPlaceholder } from "@public/index";
 import { MdOpenInNew } from "react-icons/md";
 import { formatText } from "../page";
+import Image from "next/image";
 
 const Artist = ({ artist, i }) => {
   const router = useRouter();
@@ -15,9 +16,12 @@ const Artist = ({ artist, i }) => {
   return (
     <div className="search-artist-container">
       <div className="flex justify-center items-center w-full h-[120px]">
-        <img
+        <Image
           src={artist.images ? artist.images : ArtistPlaceholder}
+          width={120}
+          height={120}
           alt={`Artist ${artist.name}`}
+          className="rounded-full object-fit border-2 border-green-500"
         />
       </div>
       <h3
