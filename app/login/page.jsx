@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
-// import { FaLock, FaUser } from "react-icons/fa";
 import { signIn, getProviders, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -13,9 +12,6 @@ const Login = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const [providers, setProviders] = useState(null);
-
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
 
   useEffect(() => {
     const fetchProviders = async () => {
@@ -74,55 +70,6 @@ const Login = () => {
           ))}
 
         {session?.user && router.push("/")}
-        {/* <button type="button" key={providers} className="button-connect">
-          <FontAwesomeIcon icon={faGoogle} className="icon" />
-          Connect with Google
-        </button>
-        <button className="button-connect">
-          <FontAwesomeIcon icon={faGithub} className="icon" />
-          Connect with Github
-        </button> */}
-
-        {/* <hr /> */}
-
-        {/* <div className="form">
-          <input
-            type="text"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-            required
-          />
-          <FaUser className="icon" />
-        </div>
-
-        <div className="form">
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-            required
-          />
-          <FaLock className="icon" />
-        </div>
-
-        <button type="submit" className="login-button" onClick={handleSubmit}>
-          Login
-        </button>
-
-        <div className="create-account">
-          <p>
-            Don&apos;t have an account?{" "}
-            <a href="/register" className="create">
-              Create Account
-            </a>
-          </p>
-        </div> */}
       </div>
     </div>
   );
