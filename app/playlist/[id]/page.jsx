@@ -1,10 +1,11 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { PlaylistIcon } from "@public";
 import { Placeholder } from "@public";
 import Image from "next/image";
+import TrackComponent from "@components/TrackComponent/TrackComponent";
 
 import { formatText } from "@app/search/page";
 import { MdOpenInNew } from "react-icons/md";
@@ -26,59 +27,48 @@ const IndividualPlaylist = ({ params }) => {
   const [songsId, setSongsId] = useState([]);
   const [songs, setSongs] = useState([]);
 
-  useEffect(() => {
-    const fetchPlaylist = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:5000/api/v1/users/${session?.user.id}/playlists/${params.id}`
+  const fetchPlaylist = useCallback(async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/v1/users/${session?.user.id}/playlists/${params.id}`
+      );
+      const data = await response.json();
+      setPlaylist(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [session?.user.id, params.id]);
+
+  const fetchPlaylistTracks = useCallback(async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/v1/users/${session?.user.id}/playlists/${params.id}/tracks`
+      );
+      const data = await response.json();
+
+      if (data.length > 0) {
+        const song = await Promise.all(
+          data.map(async (track) => {
+            const response = await fetch(
+              `http://localhost:5000/api/v1/tracks/${track.id}`
+            );
+            const data = await response.json();
+            return data;
+          })
         );
-        const data = await response.json();
-
-        if (params.id) setPlaylist(data);
-      } catch (error) {
-        console.error(error);
+        setSongs(song);
       }
-    };
-
-    fetchPlaylist();
-  }, [params.id]);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [session?.user.id, params.id]);
 
   useEffect(() => {
-    const fetchSongs = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:5000/api/v1/users/${session?.user.id}/playlists/${params.id}/tracks`
-        );
-        const data = await response.json();
-
-        setSongsId(data);
-        console.log(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchSongs();
-  }, [playlist]);
-
-  useEffect(() => {
-    const fetchSongs = async () => {
-      try {
-        for (let songId of songsId) {
-          const response = await fetch(
-            `http://localhost:5000/api/v1/tracks/${songId.id}`
-          );
-          const data = await response.json();
-
-          setSongs((prev) => [...prev, data]);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchSongs();
-  }, [songsId]);
+    if (session?.user.id && params.id) {
+      fetchPlaylist();
+      fetchPlaylistTracks();
+    }
+  }, [fetchPlaylist, fetchPlaylistTracks, session?.user.id, params.id]);
 
   const handleSearchClick = () => {
     router.push(`/search/?user=${session?.user.id}`);
@@ -93,6 +83,7 @@ const IndividualPlaylist = ({ params }) => {
             width={300}
             height={300}
             className="border border-gray-200 "
+            alt="Playlist Icon"
           />
         </div>
 
@@ -114,25 +105,11 @@ const IndividualPlaylist = ({ params }) => {
           {songs.length > 0 ? (
             <div>
               {songs.map((track, index) => (
-                <div key={index}>
-                  <p className="track-number">{index + 1}</p>
-                  <img
-                    className="track-image"
-                    src={track.images ? track.images : Placeholder}
-                    alt="Track Image"
-                    width={32}
-                    height={32}
-                  />
-                  <div className="track-title-container">
-                    <p>{track.name}</p>
-                    <a href={track.spotify_link}>{track.name}</a>
-                  </div>
-                  <p>{calcDuration(track.duration)}</p>
-                  <a href={track.spotify_link}>
-                    Spotify&nbsp;
-                    <MdOpenInNew />
-                  </a>
-                </div>
+                <TrackComponent
+                  key={index}
+                  track={{ ...track, images: track.album.images }}
+                  i={index + 1}
+                />
               ))}
             </div>
           ) : (
