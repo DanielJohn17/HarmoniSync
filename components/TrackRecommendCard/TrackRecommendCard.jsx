@@ -1,9 +1,10 @@
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-
 import { formatText } from "@app/search/page";
 import { FaSpotify } from "react-icons/fa";
 import { CiCircleMore } from "react-icons/ci";
+import { IoIosArrowForward } from "react-icons/io";
+import Notify from "@components/NotificationSlider/Notify";
 
 import "./TrackRecommendCard.css";
 
@@ -24,6 +25,7 @@ const TrackRecommendCard = ({
   isOptionOpen,
   handleOptionClick,
   handlePlaylist,
+  isPlaylistOpen, // Add this prop
 }) => {
   const { data: session } = useSession();
 
@@ -43,10 +45,7 @@ const TrackRecommendCard = ({
       <div className="flex flex-col gap-2">
         <div className="flex flex-wrap">
           <a href={`/track/${track.id}`} className="track_name">
-            {formatText({
-              text: track.name,
-              len: 12,
-            })}
+            {formatText({ text: track.name, len: 12 })}
           </a>
         </div>
 
@@ -58,7 +57,6 @@ const TrackRecommendCard = ({
                 href={`/artist/${artist.id}`}
                 className="artist_name"
               >
-                {track.artists.length === 1 && artist}
                 {formatText({ text: artist.name, len: 8 })}
                 {index !== track.artists.length - 1 && ",\u00A0"}
               </a>
@@ -72,14 +70,14 @@ const TrackRecommendCard = ({
           </a>
         </div>
 
-        <div className="w-full flex justify-start items-centers gap-4">
+        <div className="w-full flex justify-start items-center gap-4">
           <a
             href={track.spotify_link}
             target="_blank"
             className="spotify_link px-3"
           >
             <FaSpotify />
-            Litsen on Spotify
+            Listen on Spotify
           </a>
 
           <div className="dropdown">
@@ -94,7 +92,7 @@ const TrackRecommendCard = ({
                 <div className="dropdown-menu">
                   <a
                     className="like-track"
-                    onClick={() => handlePlaylist({ id: 1 })}
+                    onClick={() => handlePlaylist({ id: 1, trackId: track.id })}
                   >
                     &nbsp;Like
                   </a>
@@ -108,7 +106,9 @@ const TrackRecommendCard = ({
                     userPlaylists.map((playlist) => (
                       <a
                         key={playlist.id}
-                        onClick={() => handlePlaylist({ id: playlist.id })}
+                        onClick={() =>
+                          handlePlaylist({ id: playlist.id, trackId: track.id })
+                        }
                       >
                         {playlist.name}
                       </a>
@@ -122,14 +122,6 @@ const TrackRecommendCard = ({
             />
           </div>
         </div>
-      </div>
-
-      <div className="explicit">
-        {explicit && (
-          <div>
-            <p>E</p>
-          </div>
-        )}
       </div>
     </div>
   );
