@@ -106,9 +106,9 @@ const TrackComponent = ({ track, i }) => {
           />
         )}
 
-        <div className="track-title-container">
+        <div className="track-title-container cursor-pointer">
           <p onClick={() => handleNameClick(track.id)}>
-            {formatText({ text: track.name })}
+            {formatText({ text: track.name, length: 10 })}
           </p>
 
           <div className="track-artist-container">
