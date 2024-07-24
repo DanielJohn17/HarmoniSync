@@ -2,48 +2,36 @@ import "./Footer.css";
 
 const Footer = () => {
   return (
-    <footer>
-      <div className="footer-about">
-        <h3>About Us</h3>
-        <p>
-          Discover and enjoy the best music tailored to your preferences. Our
-          platform brings you personalized recommendations, trending tracks, and
-          more.
+    <section className="w-full h-[250px] py-10 flex flex-col items-center gap-10 bg-gray-900">
+      <div className="footer_content">
+        <div className="footer_about">
+          <h1 className="text-3xl lg:text-4xl font-satoshi font-semibold">
+            About Us
+          </h1>
+
+          <p className="font-extralight text-center">
+            Discover and enjoy the best music tailored to your preferences. Our
+            platform brings you personalized recommendations, trending tracks,
+            and more.
+          </p>
+        </div>
+
+        <div className="footer_contact">
+          <h1 className="text-xl lg:text-2xl">Contact Us</h1>
+          <p className="font-extralight">
+            Email: nathanaelcheramlack7@gamail.com
+          </p>
+          <p className="font-extralight">Phone: +251 (94) 567-8901</p>
+          <p className="font-extralight">Address: Addis Ababa, Ethiopia</p>
+        </div>
+      </div>
+
+      <div className="footer_bottom">
+        <p className="font-extralight">
+          &copy; 2024 HarmoniSync. All rights reserved.
         </p>
       </div>
-
-      <div className="footer-contact">
-        <h3>Contact Us</h3>
-        <p>Email: support@harmonisync.com</p>
-        <p>Phone: +251 (94) 567-8901</p>
-        <p>Address: Addis Ababa, Ethiopia</p>
-      </div>
-
-      <div className="footer-links">
-        <h3>Quick Links</h3>
-        <ul>
-          <li>
-            <a href="/about">About</a>
-          </li>
-          <li>
-            <a href="/contact">Contact</a>
-          </li>
-          <li>
-            <a href="/faq">FAQ</a>
-          </li>
-          <li>
-            <a href="/privacy">Privacy Policy</a>
-          </li>
-          <li>
-            <a href="/terms">Terms of Service</a>
-          </li>
-        </ul>
-      </div>
-
-      <div className="footer-bottom">
-        <p>&copy; 2024 HarmoniSync. All rights reserved.</p>
-      </div>
-    </footer>
+    </section>
   );
 };
 

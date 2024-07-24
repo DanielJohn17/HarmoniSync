@@ -1,39 +1,15 @@
-footer {
-    background-color: var(--color-background);
-    color: #ecf0f1;
-    padding: 2rem 0;
-    text-align: center;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    font-family: var(--font-family);
-  }
-  
-  footer h3 {
-    font-size: var(--font-size-h6);
-    margin-bottom: 1rem;
-  }
-  
-  footer p, footer a, footer ul, footer form {
-    list-style-type: none;
-    margin: 5px 0;
-    font-size: var(--font-size-small);
-    color: var(--color-white);
-  }
-  
-  footer a {
-    text-decoration: none;
-    color: var(--color-white);
-  }
-  
-  footer a:hover {
-    color: var(--color-secondary);
-  }
-  
-  .footer-about, .footer-contact, .footer-links, .footer-social, .footer-newsletter {
-    flex: 1 1 200px;
-    margin: 10px;
-  }
-  
-  
-  
+.footer_content {
+  @apply w-3/4 px-24 flex justify-between items-center gap-5;
+}
+
+.footer_about {
+  @apply max-w-96 flex flex-col items-center gap-5;
+}
+
+.footer_contact {
+  @apply max-w-96 flex flex-col gap-2;
+}
+
+.footer_bottom {
+  @apply w-full flex justify-center items-center gap-5;
+}
