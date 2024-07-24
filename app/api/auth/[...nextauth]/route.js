@@ -50,12 +50,12 @@ const handler = NextAuth({
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ id: "1" }),
+              body: JSON.stringify({ id: `${data.id}+1` }),
             }
           );
-        }
 
-        return true;
+          if (liked_songs.status === 201) return true;
+        }
       } catch (error) {
         console.log("Error signing in", error);
         return false;

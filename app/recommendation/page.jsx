@@ -65,7 +65,7 @@ const Page = () => {
 
   const fetchUserPlaylists = async () => {
     const res = await fetch(
-      `http://127.0.0.1:5000/api/v1/users/${session.user.id}/playlists`
+      `http://127.0.0.1:5000/api/v1/users/${session?.user.id}/playlists`
     );
     const data = await res.json();
     if (data.error) {
@@ -138,7 +138,7 @@ const Page = () => {
         </h2>
       </div>
 
-      <div className="genre-container">
+      <div className="genre-container bg-zinc-900 py-12 px-8 rounded-lg snap-mandatory snap-y">
         {genres.length > 0 &&
           genres.map((genre, index) => (
             <GenreCard
@@ -156,19 +156,21 @@ const Page = () => {
 
       <div className="recommendation-result-container">
         <h2>Suggested Tracks</h2>
-        <div className="suggested-tracks-container">
+        <div className="suggested-tracks-container py-10 bg-zinc-950 rounded-lg snap-mandatory snap-y">
           {recommendedTracks.length > 0 &&
             recommendedTracks.map((track, index) => (
-              <TrackRecommendCard
-                key={index}
-                track={track}
-                userPlaylists={userPlaylists}
-                // openUserPlaylists={openUserPlaylists}
-                // isNotificationVisible={isNotificationVisible}
-                isOptionOpen={isOptionOpen}
-                handleOptionClick={() => handleOptionClick(track)}
-                handlePlaylist={handlePlaylist}
-              />
+              <div key={index} className="snap-center">
+                <TrackRecommendCard
+                  key={index}
+                  track={track}
+                  userPlaylists={userPlaylists}
+                  // openUserPlaylists={openUserPlaylists}
+                  // isNotificationVisible={isNotificationVisible}
+                  isOptionOpen={isOptionOpen}
+                  handleOptionClick={() => handleOptionClick(track)}
+                  handlePlaylist={handlePlaylist}
+                />
+              </div>
             ))}
         </div>
       </div>

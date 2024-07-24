@@ -1,10 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { signIn, getProviders, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
+import { HarmoniSyncLogo } from "@public";
 
 import "./login.css";
 
@@ -21,12 +25,6 @@ const Login = () => {
 
     fetchProviders();
   }, []);
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    alert("Form submitted");
-    postLogin();
-  };
 
   const postLogin = async () => {
     const response = await fetch("http://127.0.0.1:5000/api/v1/users/sign_in", {
@@ -48,28 +46,52 @@ const Login = () => {
     }
   };
 
+  if (session?.user) router.push("/");
+
   return (
     <div className="login-main">
-      <div className="login-wrapper">
-        <h2 className="login-header">Login</h2>
+      <div className="main">
+        <div className="gradient" />
+      </div>
 
-        {providers &&
-          Object.values(providers).map((provider) => (
-            <button
-              type="button"
-              key={provider.name}
-              onClick={() => signIn(provider.id)}
-              className="button-connect"
-            >
-              <FontAwesomeIcon
-                icon={provider.name === "Google" ? faGoogle : faGithub}
-                className="icon"
-              />
-              Connect with {provider.name}
-            </button>
-          ))}
+      <div className="relative z-50 w-full h-full flex-col">
+        <div className="w-full px-20 py-12">
+          <Link href="/" className="logo-header">
+            <Image
+              src={HarmoniSyncLogo}
+              alt="HarmoniSync-Logo"
+              width={100}
+              height={100}
+              className="logo object-contain"
+            />
 
-        {session?.user && router.push("/")}
+            <h2 className="text-2xl lg:text-3xl">
+              Harmoni<span className="highlight">Sync</span>
+            </h2>
+          </Link>
+        </div>
+
+        <div className="w-full h-[500px] flex justify-center items-center px-40">
+          <div className="login-wrapper">
+            <h2 className="login-header">Login</h2>
+
+            {providers &&
+              Object.values(providers).map((provider) => (
+                <button
+                  type="button"
+                  key={provider.name}
+                  onClick={() => signIn(provider.id)}
+                  className="button-connect"
+                >
+                  <FontAwesomeIcon
+                    icon={provider.name === "Google" ? faGoogle : faGithub}
+                    className="icon"
+                  />
+                  Connect with {provider.name}
+                </button>
+              ))}
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,16 +1,5 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 .login-main {
-  font-family: var(--font-family);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 600px;
-  height: 100%;
+  @apply absolute top-0 left-0 min-w-full min-h-screen;
 }
 
 .login-wrapper {

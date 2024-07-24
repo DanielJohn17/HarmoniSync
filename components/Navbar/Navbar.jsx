@@ -42,11 +42,15 @@ const Navbar = () => {
               <Link href={`/new-release?user=${session?.user.id}`}>
                 New Releases
               </Link>
+              <Link href={`/recommendation?user=${session?.user.id}`}>
+                Recommendation
+              </Link>
             </div>
           ) : (
             <div className="flex gap-16">
               <Link href="/search">Search</Link>
               <Link href="/new-release">New Releases</Link>
+              <Link href="/recommendation">Recommendation</Link>
             </div>
           )}
         </div>
