@@ -64,7 +64,7 @@ const PlayList = ({ params }) => {
         <button
           type="button"
           onClick={() => router.push(`/playlist/${params.id}/create`)}
-          className="py-2 px-6 bg-transparent border hover:bg-green-600 hover:border-green-500 text-white font-semibold rounded-full transition-all duration-300 ease-in-out"
+          className="py-2 px-6 bg-green-600/60 hover:bg-green-600  text-white font-semibold rounded-full transition-all duration-300 ease-in-out"
         >
           Create Playlist
         </button>
