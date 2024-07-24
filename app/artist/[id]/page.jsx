@@ -7,6 +7,7 @@ import { FaSpotify } from "react-icons/fa";
 
 import { Placeholder } from "@public";
 import TrackComponent from "@components/TrackComponent/TrackComponent";
+import Loading from "@app/loading";
 import { formatText } from "@app/search/page";
 
 export const formatNumber = (number) => {
@@ -90,6 +91,13 @@ const Artist = ({ params }) => {
   const handleArtistClick = (id) => {
     router.push(`/artist/${id}`);
   };
+
+  if (!artist.name)
+    return (
+      <div className="w-screen min-h-screen">
+        <Loading />
+      </div>
+    );
 
   return (
     <section className="w-full min-h-screen flex flex-col -translate-y-7">

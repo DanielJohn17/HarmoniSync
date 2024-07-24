@@ -7,6 +7,7 @@ import Image from "next/image";
 import TrackComponent from "@components/TrackComponent/TrackComponent";
 
 import { FaTrashAlt } from "react-icons/fa";
+import { MdOutlineEdit } from "react-icons/md";
 
 const IndividualPlaylist = ({ params }) => {
   const router = useRouter();
@@ -101,9 +102,16 @@ const IndividualPlaylist = ({ params }) => {
           </p>
         </div>
 
-        {/* Delete Playlist */}
+        {/* Delete Playlist and Edit Playlist */}
         {playlist.name != "Liked Songs" && (
-          <div className="w-full flex justify-center">
+          <div className="w-full px-14 flex items-center gap-7">
+            <div
+              onClick={() => router.push(`/playlist/${params.id}/edit`)}
+              className="p-4 flex justify-center items-center rounded-md bg-blue-700 hover:bg-blue-500 transition-colors duration-200 cursor-pointer"
+            >
+              <MdOutlineEdit size={25} />
+            </div>
+
             <div
               onClick={() => handleDelete(params.id, session?.user.id)}
               className="p-4 flex justify-center items-center rounded-md bg-red-700 hover:bg-red-500 transition-colors duration-200 cursor-pointer"

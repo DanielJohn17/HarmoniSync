@@ -109,16 +109,19 @@ def update_playlist(user_id, playlist_id):
 
     name = data.get("name", playlist.name)
     description = data.get("description", playlist.description)
-
+    
+    playlist.id = playlist_id
     playlist.name = name
     playlist.description = description
+    
+    dic = playlist.to_dict()
 
     try:
         playlist.save_db()
     except:
         return jsonify({"error": "Could not update playlist"}), 400
     
-    return jsonify({"message": "Playlist Updated!"}), 200
+    return jsonify(dic), 200
 
 
 # create liked song playlist

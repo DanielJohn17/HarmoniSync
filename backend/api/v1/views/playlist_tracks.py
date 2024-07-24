@@ -48,13 +48,19 @@ def add_track_to_playlist(user_id, playlist_id):
     if track_id in [track.id for track in playlist.musics]:
         return jsonify({"error": "Track already in playlist"}), 400
     
-    new_track = Track(id=track_id)
-    playlist.musics.append(new_track)
+    track = storage.get('Track', track_id, None)
+    print(track.id)
+    if track:
+        new_track = track
+        playlist.musics.append(new_track)
+    else:
+        new_track = Track(id=track_id)
+        playlist.musics.append(new_track)
 
     try:
         new_track.save_db()
     except Exception as e:
-        return jsonify({"error": "Could not add track to playlist"}), 400\
+        return jsonify({"error": "Could not add track to playlist"}), 400
 
     return jsonify({"message": "Track added to playlist"}), 201
 

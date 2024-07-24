@@ -4,9 +4,9 @@ import "./Notify.css";
 const Notify = ({ message, isVisible }) => {
   return (
     <div className={`notification-sider ${isVisible ? "visible" : ""}`}>
-      <div className="flex align-center justify-center gap-1">
+      <div className="flex items-center justify-center gap-1">
         <FaRegCheckCircle className="text-green-600" />
-        {message}
+        <p>{message}</p>
       </div>
     </div>
   );

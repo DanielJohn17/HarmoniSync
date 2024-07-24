@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { FaSpotify } from "react-icons/fa";
 import TrackComponent from "@components/TrackComponent/TrackComponent";
+import Loading from "@app/loading";
+
 import "./album.css";
 
 const Album = ({ params }) => {
@@ -28,7 +30,12 @@ const Album = ({ params }) => {
     fetchAlbum();
   }, [params.id]);
 
-  if (!album.name) return <div>Loading...</div>;
+  if (!album.name)
+    return (
+      <div className="w-screen min-h-screen">
+        <Loading />;
+      </div>
+    );
 
   return (
     <div className="album-main">

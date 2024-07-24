@@ -1,19 +1,22 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
+import { useState } from "react";
 
 import Image from "next/image";
 import Link from "next/link";
 
 import { HarmoniSyncLogo } from "@public/index.js";
+import { CgDetailsMore } from "react-icons/cg";
 import "./Navbar.css";
 
 const Navbar = () => {
   const router = useRouter();
   const { data: session } = useSession();
+  const [isMoreOpetion, setIsMoreOpetion] = useState();
 
   return (
-    <div className="navbar-main">
+    <div className="navbar-main relative">
       <div className="navbar-wrapper">
         <Link href="/" className="logo-header">
           <Image
@@ -21,7 +24,7 @@ const Navbar = () => {
             alt="HarmoniSync-Logo"
             width={30}
             height={30}
-            className="logo object-contain"
+            className="object-contain rounded-full"
           />
 
           <h2>
@@ -29,31 +32,64 @@ const Navbar = () => {
           </h2>
         </Link>
 
-        <div className="navbar-links">
+        {/* Desktop view */}
+        <div className="hidden xl:flex gap-16 items-center mx-4 navbarlin">
           {session?.user && (
-            <Link href={`/profile/${session?.user.id}/playlists`}>
+            <Link
+              href={`/profile/${session?.user.id}/playlists`}
+              className="navbar_links"
+            >
               My Playlists
             </Link>
           )}
 
-          {session?.user ? (
-            <div className="flex gap-16">
-              <Link href={`/search?user=${session?.user.id}`}>Search</Link>
-              <Link href={`/new-release?user=${session?.user.id}`}>
-                New Releases
-              </Link>
-              <Link href={`/recommendation?user=${session?.user.id}`}>
-                Recommendation
-              </Link>
-            </div>
-          ) : (
-            <div className="flex gap-16">
-              <Link href="/search">Search</Link>
-              <Link href="/new-release">New Releases</Link>
-              <Link href="/recommendation">Recommendation</Link>
-            </div>
-          )}
+          <Link href="/search" className="navbar_links">
+            Search
+          </Link>
+          <Link href="/new-release" className="navbar_links">
+            New Releases
+          </Link>
+          <Link href="/recommendation" className="navbar_links">
+            Recommendation
+          </Link>
         </div>
+
+        {/* Mobile view */}
+        {isMoreOpetion && (
+          <div className="drop_down">
+            {session?.user && (
+              <Link
+                href={`/profile/${session?.user.id}/playlists`}
+                className="navbar_links"
+                onClick={() => setIsMoreOpetion((prev) => !prev)}
+              >
+                My Playlists
+              </Link>
+            )}
+
+            <Link
+              href="/search"
+              className="navbar_links"
+              onClick={() => setIsMoreOpetion((prev) => !prev)}
+            >
+              Search
+            </Link>
+            <Link
+              href="/new-release"
+              className="navbar_links"
+              onClick={() => setIsMoreOpetion((prev) => !prev)}
+            >
+              New Releases
+            </Link>
+            <Link
+              href="/recommendation"
+              className="navbar_links"
+              onClick={() => setIsMoreOpetion((prev) => !prev)}
+            >
+              Recommendation
+            </Link>
+          </div>
+        )}
 
         <div className="flex">
           {session?.user ? (
@@ -70,8 +106,15 @@ const Navbar = () => {
                 alt="Profile Image"
                 width={40}
                 height={40}
-                className="object-contain rounded-full"
+                className="object-contain rounded-full select-none"
               />
+              {/* Mobile view */}
+              <div
+                onClick={() => setIsMoreOpetion((prev) => !prev)}
+                className="xl:hidden flex justify-end items-center cursor-pointer"
+              >
+                <CgDetailsMore size={25} />
+              </div>
             </div>
           ) : (
             <div>
@@ -83,6 +126,14 @@ const Navbar = () => {
               >
                 Sign In
               </button>
+
+              {/* Mobile view */}
+              <div
+                onClick={() => setIsMoreOpetion((prev) => !prev)}
+                className="xl:hidden flex justify-end items-center cursor-pointer"
+              >
+                <CgDetailsMore size={25} />
+              </div>
             </div>
           )}
         </div>

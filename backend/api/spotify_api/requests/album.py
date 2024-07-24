@@ -88,7 +88,7 @@ class GetAlbum:
             return {"error": "Faild to retrive data"}
 
         json_result = json.loads(result.content)
-        items = json_result["items"]
+        items = json_result["albums"]["items"]
 
         new_releases = []
 

@@ -54,13 +54,14 @@ def create_user():
         return jsonify(user.to_dict()), 200
 
     new_user = User(email=email, full_name=full_name, image=image)
+    dic = new_user.to_dict()
 
     try:
         new_user.save_db()
     except:
         return jsonify({"error": "Could not create user"}), 400
     
-    return jsonify(new_user.to_dict()), 201
+    return jsonify(dic), 201
 
 # Delete user route
 @app_view.route("/users/delete_user/<user_id>", methods=["DELETE"])

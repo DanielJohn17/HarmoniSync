@@ -6,7 +6,7 @@ import GenreCard from "@components/GenreCard";
 import "./recommendation.css";
 
 const Page = () => {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [genres, setGenres] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [recommendedTracks, setRecommendedTracks] = useState([]);
@@ -40,7 +40,6 @@ const Page = () => {
   };
 
   const fetchRecommendations = async () => {
-    alert("Fetching recommendations...");
     try {
       const response = await fetch(
         "http://127.0.0.1:5000/api/v1/tracks/recommendations",
@@ -49,7 +48,9 @@ const Page = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ seedGenres: selectedGenres }),
+          body: JSON.stringify({
+            seedGenres: selectedGenres.slice(0, 4),
+          }),
         }
       );
 
@@ -160,16 +161,7 @@ const Page = () => {
           {recommendedTracks.length > 0 &&
             recommendedTracks.map((track, index) => (
               <div key={index} className="snap-center">
-                <TrackRecommendCard
-                  key={index}
-                  track={track}
-                  userPlaylists={userPlaylists}
-                  // openUserPlaylists={openUserPlaylists}
-                  // isNotificationVisible={isNotificationVisible}
-                  isOptionOpen={isOptionOpen}
-                  handleOptionClick={() => handleOptionClick(track)}
-                  handlePlaylist={handlePlaylist}
-                />
+                <TrackRecommendCard key={index} track={track} />
               </div>
             ))}
         </div>

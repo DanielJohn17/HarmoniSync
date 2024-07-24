@@ -54,7 +54,7 @@ const handler = NextAuth({
             }
           );
 
-          if (liked_songs.status === 201) return true;
+          return true;
         }
       } catch (error) {
         console.log("Error signing in", error);
