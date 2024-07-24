@@ -79,6 +79,9 @@ def delete_playlist(user_id, playlist_id):
 
     if not playlist:
         return jsonify({"error": "Playlist not found"}), 404
+    
+    if playlist.name == "Liked Songs":
+        return jsonify({"error": "Cannot delete Liked Songs playlist"}), 400
 
     try:
         user.playlists.remove(playlist)
