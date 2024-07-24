@@ -3,28 +3,16 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
 import { PlaylistIcon } from "@public";
-import { Placeholder } from "@public";
 import Image from "next/image";
 import TrackComponent from "@components/TrackComponent/TrackComponent";
 
-import { formatText } from "@app/search/page";
-import { MdOpenInNew } from "react-icons/md";
-
-const calcDuration = (duration) => {
-  const d_s = duration / 1000;
-  const min = Math.floor(d_s / 60);
-  const sec = Math.floor(d_s % 60)
-    .toString()
-    .padStart(2, "0");
-  return `${min}:${sec}`;
-};
+import { FaTrashAlt } from "react-icons/fa";
 
 const IndividualPlaylist = ({ params }) => {
   const router = useRouter();
   const { data: session } = useSession();
 
   const [playlist, setPlaylist] = useState({});
-  const [songsId, setSongsId] = useState([]);
   const [songs, setSongs] = useState([]);
 
   const fetchPlaylist = useCallback(async () => {
@@ -74,10 +62,27 @@ const IndividualPlaylist = ({ params }) => {
     router.push(`/search/?user=${session?.user.id}`);
   };
 
+  const handleDelete = async (id, user_id) => {
+    try {
+      const resposne = await fetch(
+        `http://localhost:5000/api/v1/users/${user_id}/playlists/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (resposne.status === 200) {
+        router.push(`/`);
+      }
+    } catch (error) {
+      alert("Failed to delete playlist, please try again later.");
+    }
+  };
+
   return (
     <section className="w-full min-h-screen flex flex-col px-16 py-20">
       <div className="w-full flex items-end gap-10">
-        <div className="flex justify-center items-center">
+        <div className="w-full flex justify-center items-center">
           <Image
             src={PlaylistIcon}
             width={300}
@@ -87,7 +92,7 @@ const IndividualPlaylist = ({ params }) => {
           />
         </div>
 
-        <div className="flex flex-col gap-10">
+        <div className="w-full flex flex-col gap-10">
           <h1 className="text-3xl sm:text-6xl font-semibold font-satoshi text-left">
             {playlist && playlist.name} Playlist{" "}
           </h1>
@@ -95,6 +100,18 @@ const IndividualPlaylist = ({ params }) => {
             {playlist && playlist.description}
           </p>
         </div>
+
+        {/* Delete Playlist */}
+        {playlist.name != "Liked Songs" && (
+          <div className="w-full flex justify-center">
+            <div
+              onClick={() => handleDelete(params.id, session?.user.id)}
+              className="p-4 flex justify-center items-center rounded-md bg-red-700 hover:bg-red-500 transition-colors duration-200 cursor-pointer"
+            >
+              <FaTrashAlt size={25} />
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="w-full mt-16">
