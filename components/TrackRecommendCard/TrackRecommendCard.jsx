@@ -1,5 +1,6 @@
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { useState } from "react";
 import { formatText } from "@app/search/page";
 import { FaSpotify } from "react-icons/fa";
 import { CiCircleMore } from "react-icons/ci";
@@ -19,15 +20,21 @@ export const calculateDuration = (number) => {
 
 const TrackRecommendCard = ({
   track,
-  userPlaylists,
-  openUserPlaylists,
-  isNotificationVisible,
   isOptionOpen,
   handleOptionClick,
+  userPlaylists,
+  // openUserPlaylists,
+  // isNotificationVisible,
+  // isOptionOpen,
+  // handleOptionClick,
   handlePlaylist,
-  isPlaylistOpen, // Add this prop
+  // isPlaylistOpen, // Add this prop
 }) => {
+  const [isPlaylistOpen, setIsPlaylistOpen] = useState(false);
   const { data: session } = useSession();
+  const openUserPlaylists = () => {
+    setIsPlaylistOpen(!isPlaylistOpen);
+  };
 
   return (
     <div className="relative w-[500px] px-5 py-4 bg-zinc-900 rounded-md flex gap-8">
@@ -82,27 +89,38 @@ const TrackRecommendCard = ({
 
           <div className="dropdown">
             {session && (
-              <button>
+              <button className="opt-btn">
                 <CiCircleMore onClick={handleOptionClick} />
               </button>
             )}
-
-            {isOptionOpen && (
+            {isOptionOpen === track.id && (
               <>
-                <div className="dropdown-menu">
-                  <a
-                    className="like-track"
-                    onClick={() => handlePlaylist({ id: 1, trackId: track.id })}
-                  >
-                    &nbsp;Like
-                  </a>
-                  <a onClick={openUserPlaylists}>
-                    Add to Playlist &nbsp; <IoIosArrowForward />
-                  </a>
+                <div className="dropdown">
+                  <div className="dropdown-lst">
+                    <ul>
+                      <a
+                        className="like-track"
+                        onClick={() =>
+                          handlePlaylist({ id: 1, trackId: track.id })
+                        }
+                      >
+                        Like
+                      </a>
+                      <li
+                        onClick={() => {
+                          openUserPlaylists();
+                        }}
+                      >
+                        Add to Playlist &nbsp;
+                        <IoIosArrowForward className="arrow" />
+                      </li>
+                    </ul>
+                  </div>
                 </div>
 
                 <div className="playlist-dropdown-menu">
-                  {isPlaylistOpen &&
+                  {isOptionOpen === track.id &&
+                    isPlaylistOpen &&
                     userPlaylists.map((playlist) => (
                       <a
                         key={playlist.id}
@@ -116,10 +134,10 @@ const TrackRecommendCard = ({
                 </div>
               </>
             )}
-            <Notify
+            {/* <Notify
               message="Track added to Playlist"
               isVisible={isNotificationVisible}
-            />
+            /> */}
           </div>
         </div>
       </div>

@@ -1,15 +1,17 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import TrackRecommendCard from "@components/TrackRecommendCard/TrackRecommendCard";
 import GenreCard from "@components/GenreCard";
 import "./recommendation.css";
 
 const Page = () => {
+  const { data: session, status } = useSession();
   const [genres, setGenres] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [recommendedTracks, setRecommendedTracks] = useState([]);
   const [userPlaylists, setUserPlaylists] = useState([]);
-  const [isOptionOpen, setIsOptionOpen] = useState(false);
+  const [isOptionOpen, setIsOptionOpen] = useState(null);
   const [isPlaylistOpen, setIsPlaylistOpen] = useState(false);
   const [isNotificationVisible, setNotificationVisible] = useState(false);
 
@@ -39,7 +41,6 @@ const Page = () => {
 
   const fetchRecommendations = async () => {
     alert("Fetching recommendations...");
-    console.log(selectedGenres);
     try {
       const response = await fetch(
         "http://127.0.0.1:5000/api/v1/tracks/recommendations",
@@ -55,14 +56,31 @@ const Page = () => {
       const data = await response.json();
       if (!data.error) {
         setRecommendedTracks(data);
+        fetchUserPlaylists();
       }
     } catch (error) {
       console.error("Error fetching recommendations:", error);
     }
   };
 
-  const handleOptionClick = () => {
-    setIsOptionOpen(!isOptionOpen);
+  const fetchUserPlaylists = async () => {
+    const res = await fetch(
+      `http://127.0.0.1:5000/api/v1/users/${session.user.id}/playlists`
+    );
+    const data = await res.json();
+    if (data.error) {
+      console.log("Error Fetching Playlist.");
+    } else {
+      setUserPlaylists(data);
+    }
+  };
+
+  const handleOptionClick = (track) => {
+    if (isOptionOpen === track.id) {
+      setIsOptionOpen(null);
+    } else {
+      setIsOptionOpen(track.id);
+    }
   };
 
   const openUserPlaylists = () => {
@@ -132,7 +150,9 @@ const Page = () => {
           ))}
       </div>
 
-      <button onClick={fetchRecommendations}>Submit</button>
+      <button className="submit" onClick={fetchRecommendations}>
+        Submit
+      </button>
 
       <div className="recommendation-result-container">
         <h2>Suggested Tracks</h2>
@@ -143,10 +163,10 @@ const Page = () => {
                 key={index}
                 track={track}
                 userPlaylists={userPlaylists}
-                openUserPlaylists={openUserPlaylists}
-                isNotificationVisible={isNotificationVisible}
+                // openUserPlaylists={openUserPlaylists}
+                // isNotificationVisible={isNotificationVisible}
                 isOptionOpen={isOptionOpen}
-                handleOptionClick={handleOptionClick}
+                handleOptionClick={() => handleOptionClick(track)}
                 handlePlaylist={handlePlaylist}
               />
             ))}
