@@ -49,7 +49,6 @@ def add_track_to_playlist(user_id, playlist_id):
         return jsonify({"error": "Track already in playlist"}), 400
     
     track = storage.get('Track', track_id, None)
-    print(track.id)
     if track:
         new_track = track
         playlist.musics.append(new_track)
