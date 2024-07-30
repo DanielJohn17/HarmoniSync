@@ -153,7 +153,7 @@ const IndividualPlaylist = ({ params }) => {
           {songs.length > 0 ? (
             <div>
               {songs.map((track, index) => (
-                <div className="flex items-center" key={index}>
+                <div className="flex items-center gap-9" key={index}>
                   <TrackComponent
                     key={index}
                     track={{ ...track, images: track.album.images }}
