@@ -65,16 +65,29 @@ To run HarmoniSync locally, follow these steps:
    ```bash
    cd HarmoniSync
    ```
-3. Install the dependencies:
+3. Install the Frontend dependencies:
    ```bash
    npm install
    ```
-4. Set up environment variables:
+4. Install the backend dependencies:
+
+   ```bash
+   pip install -m pip install -m requirements.txt
+   ```
+
+5. Set up environment variables:
 
    - Create a `.env` file in the root directory.
    - Add your Spotify API credentials and other required environment variables.
 
-5. Start the development server:
+6. Start the backend development server:
+
+   ```bash
+   cd backend
+   python -m api.v1.app
+   ```
+
+7. Start the frontend development server:
    ```bash
    npm run dev
    ```
