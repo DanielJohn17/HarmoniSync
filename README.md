@@ -72,7 +72,7 @@ To run HarmoniSync locally, follow these steps:
 4. Install the backend dependencies:
 
    ```bash
-   pip install -m pip install -m requirements.txt
+   pip install -r requirements.txt
    ```
 
 5. Set up environment variables:
