@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { MdDelete } from "react-icons/md";
 import Image from "next/image";
 import { PlaylistIcon } from "@public";
 
@@ -23,15 +22,6 @@ const PlayListsCard = ({ data, handleTagClick, removePlaylist }) => {
               height={150}
             />
             <h3 className="text-left">{playlist.name}</h3>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                removePlaylist(playlist.id);
-              }}
-              text="Delete Playlist"
-            >
-              <MdDelete className="text-2xl hover:text-red-600" />
-            </button>
           </div>
         ))
       ) : (
@@ -66,23 +56,6 @@ const PlayList = ({ params }) => {
     fetchPlaylists();
   }, [params.id]);
 
-  const removePlaylist = async (id) => {
-    try {
-      await fetch(
-        `http://localhost:5000/api/v1/users/${params.id}/playlists/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      setPlayLists(playlists.filter((playlist) => playlist.id !== id));
-    } catch (error) {
-      console.error("Error removing playlist:", error);
-    }
-  };
-
   const handleTagClick = (id) => {
     router.push(`/playlist/${id}`);
   };
@@ -99,11 +72,7 @@ const PlayList = ({ params }) => {
           Create Playlist
         </button>
       </div>
-      <PlayListsCard
-        data={playlists}
-        handleTagClick={handleTagClick}
-        removePlaylist={removePlaylist}
-      />
+      <PlayListsCard data={playlists} handleTagClick={handleTagClick} />
     </section>
   );
 };
