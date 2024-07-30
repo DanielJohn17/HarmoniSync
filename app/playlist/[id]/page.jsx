@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
 import { PlaylistIcon } from "@public";
+import { MdDelete } from "react-icons/md";
 import Image from "next/image";
 import TrackComponent from "@components/TrackComponent/TrackComponent";
 
@@ -80,6 +81,28 @@ const IndividualPlaylist = ({ params }) => {
     }
   };
 
+  const removeTrackFromPlaylist = async (playlist_id, user_id, track_id) => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/v1/users/${user_id}/playlists/${playlist_id}/tracks/${track_id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status === 200) {
+        // Filter the songs to remove.
+        setSongs((prevSongs) =>
+          prevSongs.filter((track) => track.id !== track_id)
+        );
+      }
+    } catch (error) {
+      console.error("Couldn't Delete Track.");
+    }
+  };
+
   return (
     <section className="w-full min-h-screen flex flex-col px-16 py-20">
       <div className="w-full flex items-end gap-10">
@@ -130,11 +153,25 @@ const IndividualPlaylist = ({ params }) => {
           {songs.length > 0 ? (
             <div>
               {songs.map((track, index) => (
-                <TrackComponent
-                  key={index}
-                  track={{ ...track, images: track.album.images }}
-                  i={index + 1}
-                />
+                <div className="flex items-center" key={index}>
+                  <TrackComponent
+                    key={index}
+                    track={{ ...track, images: track.album.images }}
+                    i={index + 1}
+                  />
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeTrackFromPlaylist(
+                        params.id,
+                        session?.user.id,
+                        track.id
+                      );
+                    }}
+                  >
+                    <MdDelete className="text-3xl hover:text-red-600" />
+                  </button>
+                </div>
               ))}
             </div>
           ) : (

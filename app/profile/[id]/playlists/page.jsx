@@ -2,10 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { MdDelete } from "react-icons/md";
 import Image from "next/image";
 import { PlaylistIcon } from "@public";
 
-const PlayListsCard = ({ data, handleTagClick }) => {
+const PlayListsCard = ({ data, handleTagClick, removePlaylist }) => {
   return (
     <section className="min-h-screen flex flex-wrap gap-4 px-16">
       {data.length > 0 ? (
@@ -22,6 +23,15 @@ const PlayListsCard = ({ data, handleTagClick }) => {
               height={150}
             />
             <h3 className="text-left">{playlist.name}</h3>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                removePlaylist(playlist.id);
+              }}
+              text="Delete Playlist"
+            >
+              <MdDelete className="text-2xl hover:text-red-600" />
+            </button>
           </div>
         ))
       ) : (
@@ -37,21 +47,41 @@ const PlayListsCard = ({ data, handleTagClick }) => {
 
 const PlayList = ({ params }) => {
   const router = useRouter();
-
   const [playlists, setPlayLists] = useState([]);
 
   useEffect(() => {
     const fetchPlaylists = async () => {
-      const response = await fetch(
-        `http://localhost:5000/api/v1/users/${params.id}/playlists`
-      );
-      const data = await response.json();
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/v1/users/${params.id}/playlists`
+        );
+        const data = await response.json();
 
-      if (params.id) setPlayLists(data);
+        if (params.id) setPlayLists(data);
+      } catch (error) {
+        console.error("Error fetching playlists:", error);
+      }
     };
 
     fetchPlaylists();
   }, [params.id]);
+
+  const removePlaylist = async (id) => {
+    try {
+      await fetch(
+        `http://localhost:5000/api/v1/users/${params.id}/playlists/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setPlayLists(playlists.filter((playlist) => playlist.id !== id));
+    } catch (error) {
+      console.error("Error removing playlist:", error);
+    }
+  };
 
   const handleTagClick = (id) => {
     router.push(`/playlist/${id}`);
@@ -69,7 +99,11 @@ const PlayList = ({ params }) => {
           Create Playlist
         </button>
       </div>
-      <PlayListsCard data={playlists} handleTagClick={handleTagClick} />
+      <PlayListsCard
+        data={playlists}
+        handleTagClick={handleTagClick}
+        removePlaylist={removePlaylist}
+      />
     </section>
   );
 };
